@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:mini_pos/core/app/service/barcode_scanner_service.dart';
 import 'package:mini_pos/core/app/state.dart';
 
 import '../../flavors.dart';
@@ -75,7 +76,7 @@ class _AppPageState extends State<AppPage> {
                         child: _flavorBanner(
                           child: LoaderOverlay(
                             overlayWidgetBuilder: (progress) => xLoading(),
-                            child: child,
+                            child: GlobalBarcodeListener(child: child),
                           ),
                           show: kDebugMode == true,
                         ),
