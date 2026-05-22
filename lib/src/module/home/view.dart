@@ -15,11 +15,13 @@ import '../../../core/global_widgets/x_button.dart';
 import '../../../core/global_widgets/x_network_image.dart';
 import '../../../core/global_widgets/x_showmodal_bottom.dart';
 import '../../../core/utils/app_ext.dart';
+import '../../../core/utils/empty_data.dart';
 import '../../../core/utils/loading_shimmer.dart';
 import '../../../core/utils/x_paged_child_builder_delegate.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../translation/app_locale.dart';
 import '../../model/category_response/category_response.dart';
+import '../../model/proudct/proudct.dart';
 import 'logic.dart';
 import 'state.dart';
 
@@ -43,29 +45,149 @@ class HomePage extends StatelessWidget {
           ),
         ),
         padding: .symmetric(vertical: 40.d),
-        child: Column(
-          children: [
-            Expanded(flex: 5, child: _buildPromotionSlider()),
-            Expanded(
-              flex: 4,
-              child: Padding(
-                padding: .symmetric(horizontal: 20.d),
-                child: Column(
-                  spacing: 10.d,
-                  children: [
-                    Expanded(flex: 1, child: _buildCategory()),
-                    Expanded(flex: 2, child: _productGridView()),
-                  ],
+        child: GetBuilder<HomeLogic>(
+          builder: (logic) {
+            return Column(
+              children: [
+                Expanded(flex: 6, child: _buildPromotionSlider()),
+                Expanded(
+                  flex: 4,
+                  child: Padding(
+                    padding: .symmetric(horizontal: 20.d),
+                    child: Column(
+                      spacing: 10.d,
+                      children: [
+                        Expanded(flex: 1, child: _buildCategory()),
+                        Expanded(flex: 2, child: _productGridView()),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
   Widget _productGridView() {
+    return SizedBox(
+      height: 200.0.d,
+      width: Get.width,
+      child: PagedListView<int, Proudct>.separated(
+        separatorBuilder: (context, index) {
+          return xSpaceH(size: 5.0.d);
+        },
+        scrollDirection: Axis.horizontal,
+        pagingController: state.productPagingController.value,
+        padding: EdgeInsets.zero,
+        builderDelegate: XPagedChildBuilderDelegate.list(
+          newPageProgressIndicatorBuilder: (context) =>
+              Row(children: List.generate(3, (index) => Container().toShimmer)),
+          firstPageProgressIndicatorBuilder: (context) =>
+              Row(children: List.generate(3, (index) => Container().toShimmer)),
+          noItemsFoundIndicatorBuilder: (context) => EmptyData(),
+          firstPageErrorIndicatorBuilder: (context) => EmptyData(),
+          itemBuilder: (context, item, index) {
+            return Stack(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(6.0.d),
+                  child: Container(
+                    height: 200.0.d,
+                    width: 170.0.d,
+                    decoration: xBoxDecoration(
+                      color: Colors.white,
+                      hasShadow: true,
+                    ),
+                    child: XButton(
+                      onPress: () {},
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Center(
+                              child: XNetworkImage(
+                                src:
+                                    item?.thumbnailImage?.thumbnailFilePath ??
+                                    "",
+                                fit: BoxFit.fill,
+                                isNeedErrorDesc: true,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: 10.0.d,
+                              right: 10.0.d,
+                              bottom: 10.0.d,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item?.nameEn ?? "",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: XTextStyle.regular(
+                                    fontSize: 10.0.d,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                xSpaceV(size: 5.0.d),
+                                Row(
+                                  children: [
+                                    Text(
+                                      item.price.toCurrency(),
+                                      style: XTextStyle.regular(
+                                        fontSize: 14.d,
+                                        color: AppColor.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    xSpaceH(size: 5..d),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                Positioned(
+                  top: 5.0.d,
+                  left: 5.0.d,
+                  child: Container(
+                    decoration: xBoxDecoration(
+                      color: AppColor.primaryColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10.0.d),
+                        bottomRight: Radius.circular(10.0.d),
+                      ),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 5.0.d,
+                      vertical: 2.0.d,
+                    ),
+                    child: Text(
+                      '14',
+                      style: XTextStyle.medium(
+                        color: Colors.white,
+                        fontSize: 10.0.d,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+
     return GridView.builder(
       physics: NeverScrollableScrollPhysics(),
       itemCount: 3,
@@ -328,8 +450,10 @@ class HomePage extends StatelessWidget {
                   spacing: 5.d,
                   crossAxisAlignment: .start,
                   children: [
-                    Text("CHIP MONG", style: XTextStyle.bold(fontSize: 8.d,
-                      fontWeight: .w900,)),
+                    Text(
+                      "CHIP MONG",
+                      style: XTextStyle.bold(fontSize: 8.d, fontWeight: .w900),
+                    ),
                     Text(
                       "GROUP",
                       style: XTextStyle.bold(
