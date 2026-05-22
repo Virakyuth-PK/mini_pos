@@ -37,37 +37,95 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColor.white,
       floatingActionButton: _floatActionButton(),
-      bottomNavigationBar: _bottomNavigationBar(),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            alignment: AlignmentGeometry.topCenter,
-            image: AssetImage(Assets.icon.home.mainPagePg.path),
+      // bottomNavigationBar: _bottomNavigationBar(),
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                alignment: AlignmentGeometry.topCenter,
+                image: AssetImage(Assets.icon.home.mainPagePg.path),
+              ),
+            ),
+            padding: .symmetric(vertical: 40.d),
+            child: GetBuilder<HomeLogic>(
+              builder: (logic) {
+                return Column(
+                  children: [
+                    Expanded(flex: 6, child: _buildPromotionSlider()),
+                    Expanded(
+                      flex: 4,
+                      child: Padding(
+                        padding: .symmetric(horizontal: 20.d),
+                        child: Column(
+                          spacing: 10.d,
+                          children: [
+                            _buildCategory(),
+                            Expanded(flex: 3, child: _productGridView()),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
-        ),
-        padding: .symmetric(vertical: 40.d),
-        child: GetBuilder<HomeLogic>(
-          builder: (logic) {
-            return Column(
-              children: [
-                Expanded(flex: 6, child: _buildPromotionSlider()),
-                Expanded(
-                  flex: 4,
-                  child: Padding(
-                    padding: .symmetric(horizontal: 20.d),
-                    child: Column(
-                      spacing: 10.d,
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 40.d,
+              decoration: xBoxDecoration(
+                color: AppColor.scaffoldBackgroundColor,
+                borderRadius: BorderRadius.zero,
+              ),
+              child: Padding(
+                padding: .symmetric(vertical: 5.d),
+                child: Row(
+                  mainAxisAlignment: .center,
+                  spacing: 10.d,
+                  children: [
+                    SvgPicture.asset(Assets.svg.cmtrLogo, fit: .fitHeight),
+                    VerticalDivider(),
+                    SvgPicture.asset(Assets.svg.cmgsvg, fit: .fitHeight),
+                    Column(
+                      crossAxisAlignment: .start,
                       children: [
-                        _buildCategory(),
-                        Expanded(flex: 3, child: _productGridView()),
+                        Text(
+                          "Develop By",
+                          style: XTextStyle.bold(fontSize: 8.d),
+                        ),
+                        Row(
+                          spacing: 5.d,
+                          crossAxisAlignment: .start,
+                          children: [
+                            Text(
+                              "CHIP MONG",
+                              style: XTextStyle.bold(
+                                fontSize: 8.d,
+                                fontWeight: .w900,
+                              ),
+                            ),
+                            Text(
+                              "GROUP",
+                              style: XTextStyle.bold(
+                                fontSize: 8.d,
+                                fontWeight: .w900,
+                                color: CompanyColor.CHIPMONG_GROUP,
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            );
-          },
-        ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -76,52 +134,59 @@ class HomePage extends StatelessWidget {
     return GetBuilder<HomeLogic>(
       builder: (logic) {
         if (state.isLoading.value == true) {
-          return ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: 5,
-            separatorBuilder: (_, __) => xSpaceH(size: 5.d),
-            itemBuilder: (_, __) => Container(
-              width: 170.d,
-              height: 200.d,
-              color: Colors.red,
-            ).toShimmer,
+          return Container(
+            margin: EdgeInsets.symmetric(vertical: 5.d),
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: 5,
+              separatorBuilder: (_, __) => xSpaceH(size: 5.d),
+              itemBuilder: (_, __) => Container(
+                padding: EdgeInsets.all(6.0.d),
+                width: 170.d,
+                height: 100.d,
+                color: Colors.red,
+              ).toShimmer,
+            ),
           );
         }
-        return SizedBox(
-          height: 200.0.d,
-          width: Get.width,
-          child: PagedListView<int, Proudct>.separated(
-            separatorBuilder: (context, index) {
-              return xSpaceH(size: 5.0.d);
+        return PagedListView<int, Proudct>.separated(
+          separatorBuilder: (context, index) {
+            return xSpaceH(size: 5.0.d);
+          },
+          scrollDirection: Axis.horizontal,
+          pagingController: state.productPagingController.value,
+          padding: EdgeInsets.zero,
+          builderDelegate: XPagedChildBuilderDelegate.list(
+            newPageProgressIndicatorBuilder: (context) {
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 5.d),
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 5,
+                  separatorBuilder: (_, __) => xSpaceH(size: 5.d),
+                  itemBuilder: (_, __) => Container(
+                    padding: EdgeInsets.all(6.0.d),
+                    width: 170.d,
+                    height: 100.d,
+                    color: Colors.red,
+                  ).toShimmer,
+                ),
+              );
             },
-            scrollDirection: Axis.horizontal,
-            pagingController: state.productPagingController.value,
-            padding: EdgeInsets.zero,
-            builderDelegate: XPagedChildBuilderDelegate.list(
-              newPageProgressIndicatorBuilder: (context) => ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: 5,
-                separatorBuilder: (_, __) => xSpaceH(size: 5.d),
-                itemBuilder: (_, __) => Container(
-                  width: 170.d,
-                  height: 200.d,
-                  color: Colors.red,
-                ).toShimmer,
-              ),
-              noItemsFoundIndicatorBuilder: (context) => EmptyData(),
-              firstPageErrorIndicatorBuilder: (context) => EmptyData(),
-              itemBuilder: (context, item, index) {
-                return XButton(
-                  onPress: () {
-                    Get.toNamed(AppRoute.productDetail, arguments: item);
-                  },
-                  child: ProductItem(
-                    product: item,
-                    discount: logic.formatDiscount(item),
-                  ),
-                );
-              },
-            ),
+            noItemsFoundIndicatorBuilder: (context) => EmptyData(),
+            firstPageErrorIndicatorBuilder: (context) => EmptyData(),
+            itemBuilder: (context, item, index) {
+              return XButton(
+                onPress: () {
+                  Get.toNamed(AppRoute.productDetail, arguments: item);
+                },
+                child: ProductItem(
+                  product: item,
+                  height: Get.height,
+                  discount: logic.formatDiscount(item),
+                ),
+              );
+            },
           ),
         );
       },
@@ -159,7 +224,12 @@ class HomePage extends StatelessWidget {
                 height: 130.0.d,
                 width: 100..d,
                 decoration: xBoxDecoration(
-                  color: isActive ? AppColor.primaryColor : Colors.white,
+                  hasBorder: true,
+                  borderWidth: 1.5.d,
+                  borderColor: isActive ? AppColor.primaryColor : Colors.white,
+                  // color: isActive
+                  //     ? AppColor.primaryColor.withValues(alpha: 0.02)
+                  //     : Colors.white,
                   boxShadow: [
                     isActive == true
                         ? BoxShadow(
@@ -199,7 +269,9 @@ class HomePage extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: XTextStyle.regular(
                             fontSize: 11.0.d,
-                            color: isActive ? Colors.white : Color(0xff56575A),
+                            color: isActive
+                                ? AppColor.primaryColor
+                                : Color(0xff56575A),
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -257,7 +329,7 @@ class HomePage extends StatelessWidget {
           right: 40.d,
           child: Container(
             padding: EdgeInsetsGeometry.symmetric(
-              horizontal: 15.d,
+              horizontal: 10.d,
               vertical: 5.d,
             ),
             decoration: xBoxDecoration(
@@ -269,7 +341,7 @@ class HomePage extends StatelessWidget {
               style: XTextStyle.regular(
                 color: AppColor.white,
                 fontWeight: FontWeight.bold,
-                fontSize: XFontSize.xXS10,
+                fontSize: 12.d,
               ),
             ),
           ),

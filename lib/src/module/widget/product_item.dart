@@ -36,8 +36,8 @@ class ProductItem extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: AppColor.hintColor.withOpacity(0.08),
-                  blurRadius: 2.d,
-                  offset: const Offset(0, 2),
+                  blurRadius: 10.d,
+                  offset: const Offset(0, 10),
                 ),
               ],
             ),
