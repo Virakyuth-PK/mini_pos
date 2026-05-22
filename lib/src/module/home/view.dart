@@ -57,8 +57,8 @@ class HomePage extends StatelessWidget {
                     child: Column(
                       spacing: 10.d,
                       children: [
-                        Expanded(flex: 1, child: _buildCategory()),
-                        Expanded(flex: 2, child: _productGridView()),
+                        _buildCategory(),
+                        Expanded(flex: 3, child: _productGridView()),
                       ],
                     ),
                   ),
@@ -99,7 +99,13 @@ class HomePage extends StatelessWidget {
                     width: 170.0.d,
                     decoration: xBoxDecoration(
                       color: Colors.white,
-                      hasShadow: true,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColor.hintColor.withOpacity(0.08),
+                          blurRadius: 28.d,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
                     child: XButton(
                       onPress: () {},
@@ -173,7 +179,7 @@ class HomePage extends StatelessWidget {
                       vertical: 2.0.d,
                     ),
                     child: Text(
-                      '14',
+                      '14%',
                       style: XTextStyle.medium(
                         color: Colors.white,
                         fontSize: 10.0.d,
@@ -187,150 +193,20 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
-
-    return GridView.builder(
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: 3,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 15.d,
-        crossAxisSpacing: 15.d,
-        childAspectRatio: 1,
-      ),
-      itemBuilder: (context, index) {
-        return XButton(
-          onPress: () {
-            xShowModalBottomSheet(
-              showBottomButton: true,
-              customBottomWidget: Container(
-                margin: EdgeInsets.only(top: 15.d),
-                child: XButton(
-                  onPress: () {
-                    Get.back();
-                  },
-                  child: Container(
-                    width: Get.width,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 50.d,
-                      vertical: 15.d,
-                    ),
-                    decoration: xBoxDecoration(color: AppColor.primaryColor),
-                    child: Center(
-                      child: Text(
-                        AppLocale.back.tr,
-                        style: XTextStyle.large(color: AppColor.white),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              body: (BuildContext context, ScrollController scrollController) {
-                return Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 15.d,
-                    children: [
-                      XNetworkImage(
-                        height: 300.d,
-                        width: Get.width,
-                        fit: BoxFit.fitHeight,
-                        src:
-                            'https://storage.googleapis.com/dev_bucket_cmrt/cmrt-supermarket-media/Item/028400003575/028400003575_1_thumbnail.png?t=1779338414',
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'NR-SDACH NEAK MEAS',
-                                  style: XTextStyle.medium(fontSize: 20.d),
-                                ),
-                                Text(
-                                  'ស្ដេចនាគមាស',
-                                  style: XTextStyle.medium(fontSize: 20.d),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Text(
-                            "${double.parse('12.2').toCurrency()}/ KG",
-                            style: XTextStyle.medium(
-                              color: AppColor.primaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          },
-          child: Container(
-            decoration: xBoxDecoration(hasShadow: true),
-            child: Padding(
-              padding: EdgeInsets.all(8.0.d),
-              child: Column(
-                spacing: 5.d,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: XNetworkImage(
-                        width: Get.width,
-                        height: 100.d,
-                        fit: BoxFit.fitHeight,
-                        src:
-                            'https://storage.googleapis.com/dev_bucket_cmrt/cmrt-supermarket-media/Item/028400003575/028400003575_1_thumbnail.png?t=1779338414',
-                      ),
-                    ),
-                  ),
-                  Text(
-                    'NR-SDACH NEAK MEAS',
-                    style: XTextStyle.regular(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    'ស្ដេចនាគមាស',
-                    style: XTextStyle.regular(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    "${double.parse('12.2').toCurrency()}/ KG",
-                    style: XTextStyle.medium(
-                      color: AppColor.primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 
   Widget _buildCategory() {
     return SizedBox(
-      // height: 165.0.d,
+      height: 140.0.d,
       width: Get.width,
       child: PagedListView<int, CategoryResponse>.separated(
         padding: EdgeInsets.only(
           right: 15..d,
           top: 15..d,
           bottom: 10..d,
-          left: 1.0.d,
+          left: 15.0.d,
         ),
-        separatorBuilder: (context, index) => xSpaceH(),
+        separatorBuilder: (context, index) => xSpaceH(size: 20.d),
         pagingController: state.categoryPagingController.value,
         scrollDirection: Axis.horizontal,
         builderDelegate: XPagedChildBuilderDelegate.list(
@@ -342,9 +218,24 @@ class HomePage extends StatelessWidget {
           itemBuilder: (context, item, index) {
             var isActive = state.currentIndex.value == index;
             return Container(
-              height: 180.0.d,
-              width: 120..d,
-              decoration: xBoxDecoration(color: Colors.white, hasShadow: true),
+              height: 130.0.d,
+              width: 100..d,
+              decoration: xBoxDecoration(
+                color: isActive ? AppColor.primaryColor : Colors.white,
+                boxShadow: [
+                  isActive == true
+                      ? BoxShadow(
+                          color: AppColor.primaryColor.withOpacity(0.08),
+                          blurRadius: 28.d,
+                          offset: const Offset(0, 2),
+                        )
+                      : BoxShadow(
+                          color: AppColor.hintColor.withOpacity(0.08),
+                          blurRadius: 28.d,
+                          offset: const Offset(0, 2),
+                        ),
+                ],
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -362,7 +253,7 @@ class HomePage extends StatelessWidget {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsetsGeometry.symmetric(horizontal: 5.d),
                       child: Text(
                         "${item?.nameEn}".toUpperCase(),
                         textAlign: TextAlign.center,
@@ -370,6 +261,7 @@ class HomePage extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: XTextStyle.regular(
                           fontSize: 11.0.d,
+                          color: isActive ? Colors.white : Color(0xff56575A),
                           fontWeight: FontWeight.w700,
                         ),
                       ),

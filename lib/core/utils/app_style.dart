@@ -28,7 +28,7 @@ BoxDecoration xBoxDecoration({
           BoxShadow(
             color: shadowColor ?? Color(0xFF6B7280).withOpacity(0.08),
             blurRadius: 28.d,
-            offset: const Offset(0, 12),
+            offset: const Offset(0, 2),
           ),
         ]
       : boxShadow,
