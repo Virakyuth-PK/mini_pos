@@ -422,15 +422,20 @@ class HomePage extends StatelessWidget {
           ),
         ),
         Positioned(
-          bottom: 10,
-          right: 0,
+          bottom: 15.d,
+          right: 40.d,
           child: Container(
+            padding: EdgeInsetsGeometry.symmetric(
+              horizontal: 10.d,
+              vertical: 5.d,
+            ),
             decoration: xBoxDecoration(
-              color: Colors.red,
+              color: AppColor.primaryColor.withOpacity(0.2),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
               "${state.currentIndexSlide.value + 1} / ${state.imageUrlList.length}",
+              style: XTextStyle.medium(color: AppColor.primaryColor),
             ),
           ),
         ),
