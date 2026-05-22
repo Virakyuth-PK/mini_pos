@@ -5,12 +5,21 @@ class ApiEndpoint {
   static const String version = "1";
   static const String suffix = "/api/v$version";
 
-  //region Authentication
   static String product(ProductEndpoint endPoint) {
-    var path = '${FConfig.baseUrl}$suffix/ItemPrice';
+    var path = '${FConfig.baseUrl}$suffix';
     switch (endPoint) {
       case ProductEndpoint.Get_All:
-        return '$path/GetAllPriceChecking';
+        return '$path/ItemPrice/GetAllPriceChecking';
+      case ProductEndpoint.Get_All_Category:
+        return '$path/MainCategory/Get';
+    }
+  }
+
+  static String promotion(PromotionEndpoint endPoint) {
+    var path = '${FConfig.baseUrl}$suffix';
+    switch (endPoint) {
+      case PromotionEndpoint.Get_All:
+        return '$path/Article/GetAll';
     }
   }
 }
