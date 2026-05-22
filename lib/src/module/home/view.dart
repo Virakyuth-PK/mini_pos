@@ -388,35 +388,53 @@ class HomePage extends StatelessWidget {
     if (state.imageUrlList.isEmpty) {
       return SizedBox.shrink();
     }
-    return SizedBox(
-      height: double.infinity,
-      width: Get.width,
-      child: CarouselSlider.builder(
-        itemCount: state.imageUrlList.length,
-        itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: XNetworkImage(
-              height: double.infinity,
-              src: state.imageUrlList[itemIndex] ?? "",
-              fit: .fitHeight,
-            ),
-          );
-        },
-        options: CarouselOptions(
-          onPageChanged: (index, reason) {
-            state.currentIndexSlide.value = index;
-            logic.update();
-          },
+    return Stack(
+      children: [
+        SizedBox(
           height: double.infinity,
-          aspectRatio: 0.2,
-          viewportFraction: 0.9,
-          initialPage: 0,
-          enlargeFactor: 0.2,
-          autoPlay: true,
-          enlargeCenterPage: true,
+          width: Get.width,
+          child: CarouselSlider.builder(
+            itemCount: state.imageUrlList.length,
+            itemBuilder:
+                (BuildContext context, int itemIndex, int pageViewIndex) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: XNetworkImage(
+                      height: double.infinity,
+                      src: state.imageUrlList[itemIndex] ?? "",
+                      fit: .fitHeight,
+                    ),
+                  );
+                },
+            options: CarouselOptions(
+              onPageChanged: (index, reason) {
+                state.currentIndexSlide.value = index;
+                logic.update();
+              },
+              height: double.infinity,
+              aspectRatio: 0.2,
+              viewportFraction: 0.9,
+              initialPage: 0,
+              enlargeFactor: 0.2,
+              autoPlay: true,
+              enlargeCenterPage: true,
+            ),
+          ),
         ),
-      ),
+        Positioned(
+          bottom: 10,
+          right: 0,
+          child: Container(
+            decoration: xBoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              "${state.currentIndexSlide.value + 1} / ${state.imageUrlList.length}",
+            ),
+          ),
+        ),
+      ],
     );
   }
 
