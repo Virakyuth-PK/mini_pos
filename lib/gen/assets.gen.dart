@@ -1,0 +1,193 @@
+// dart format width=80
+
+/// GENERATED CODE - DO NOT MODIFY BY HAND
+/// *****************************************************
+///  FlutterGen
+/// *****************************************************
+
+// coverage:ignore-file
+// ignore_for_file: type=lint
+// ignore_for_file: deprecated_member_use,directives_ordering,implicit_dynamic_list_literal,unnecessary_import
+
+import 'package:flutter/widgets.dart';
+
+class $AssetsGifGen {
+  const $AssetsGifGen();
+
+  /// File path: assets/gif/cmrt_loading.gif
+  AssetGenImage get cmrtLoading =>
+      const AssetGenImage('assets/gif/cmrt_loading.gif');
+
+  /// File path: assets/gif/loading_success.gif
+  AssetGenImage get loadingSuccess =>
+      const AssetGenImage('assets/gif/loading_success.gif');
+
+  /// File path: assets/gif/no_internet.gif
+  AssetGenImage get noInternet =>
+      const AssetGenImage('assets/gif/no_internet.gif');
+
+  /// File path: assets/gif/success.gif
+  AssetGenImage get success => const AssetGenImage('assets/gif/success.gif');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [
+    cmrtLoading,
+    loadingSuccess,
+    noInternet,
+    success,
+  ];
+}
+
+class $AssetsIconGen {
+  const $AssetsIconGen();
+
+  /// File path: assets/icon/empty.png
+  AssetGenImage get empty => const AssetGenImage('assets/icon/empty.png');
+
+  /// Directory path: assets/icon/home
+  $AssetsIconHomeGen get home => const $AssetsIconHomeGen();
+
+  /// File path: assets/icon/logo_solid_dev_white.png
+  AssetGenImage get logoSolidDevWhite =>
+      const AssetGenImage('assets/icon/logo_solid_dev_white.png');
+
+  /// File path: assets/icon/logo_solid_prod_white.png
+  AssetGenImage get logoSolidProdWhite =>
+      const AssetGenImage('assets/icon/logo_solid_prod_white.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [
+    empty,
+    logoSolidDevWhite,
+    logoSolidProdWhite,
+  ];
+}
+
+class $AssetsSvgGen {
+  const $AssetsSvgGen();
+
+  /// File path: assets/svg/cmgsvg.svg
+  String get cmgsvg => 'assets/svg/cmgsvg.svg';
+
+  /// File path: assets/svg/cmtr_logo.svg
+  String get cmtrLogo => 'assets/svg/cmtr_logo.svg';
+
+  /// File path: assets/svg/empty_data.svg
+  String get emptyData => 'assets/svg/empty_data.svg';
+
+  /// File path: assets/svg/no_image.svg
+  String get noImage => 'assets/svg/no_image.svg';
+
+  /// File path: assets/svg/scan.svg
+  String get scan => 'assets/svg/scan.svg';
+
+  /// List of all assets
+  List<String> get values => [cmgsvg, cmtrLogo, emptyData, noImage, scan];
+}
+
+class $AssetsIconHomeGen {
+  const $AssetsIconHomeGen();
+
+  /// File path: assets/icon/home/main_page_pg.png
+  AssetGenImage get mainPagePg =>
+      const AssetGenImage('assets/icon/home/main_page_pg.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [mainPagePg];
+}
+
+class Assets {
+  const Assets._();
+
+  static const $AssetsGifGen gif = $AssetsGifGen();
+  static const $AssetsIconGen icon = $AssetsIconGen();
+  static const $AssetsSvgGen svg = $AssetsSvgGen();
+}
+
+class AssetGenImage {
+  const AssetGenImage(
+    this._assetName, {
+    this.size,
+    this.flavors = const {},
+    this.animation,
+  });
+
+  final String _assetName;
+
+  final Size? size;
+  final Set<String> flavors;
+  final AssetGenImageAnimation? animation;
+
+  Image image({
+    Key? key,
+    AssetBundle? bundle,
+    ImageFrameBuilder? frameBuilder,
+    ImageErrorWidgetBuilder? errorBuilder,
+    String? semanticLabel,
+    bool excludeFromSemantics = false,
+    double? scale,
+    double? width,
+    double? height,
+    Color? color,
+    Animation<double>? opacity,
+    BlendMode? colorBlendMode,
+    BoxFit? fit,
+    AlignmentGeometry alignment = Alignment.center,
+    ImageRepeat repeat = ImageRepeat.noRepeat,
+    Rect? centerSlice,
+    bool matchTextDirection = false,
+    bool gaplessPlayback = true,
+    bool isAntiAlias = false,
+    String? package,
+    FilterQuality filterQuality = FilterQuality.medium,
+    int? cacheWidth,
+    int? cacheHeight,
+  }) {
+    return Image.asset(
+      _assetName,
+      key: key,
+      bundle: bundle,
+      frameBuilder: frameBuilder,
+      errorBuilder: errorBuilder,
+      semanticLabel: semanticLabel,
+      excludeFromSemantics: excludeFromSemantics,
+      scale: scale,
+      width: width,
+      height: height,
+      color: color,
+      opacity: opacity,
+      colorBlendMode: colorBlendMode,
+      fit: fit,
+      alignment: alignment,
+      repeat: repeat,
+      centerSlice: centerSlice,
+      matchTextDirection: matchTextDirection,
+      gaplessPlayback: gaplessPlayback,
+      isAntiAlias: isAntiAlias,
+      package: package,
+      filterQuality: filterQuality,
+      cacheWidth: cacheWidth,
+      cacheHeight: cacheHeight,
+    );
+  }
+
+  ImageProvider provider({AssetBundle? bundle, String? package}) {
+    return AssetImage(_assetName, bundle: bundle, package: package);
+  }
+
+  String get path => _assetName;
+
+  String get keyName => _assetName;
+}
+
+class AssetGenImageAnimation {
+  const AssetGenImageAnimation({
+    required this.isAnimation,
+    required this.duration,
+    required this.frames,
+  });
+
+  final bool isAnimation;
+  final Duration duration;
+  final int frames;
+}
