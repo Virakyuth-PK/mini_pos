@@ -35,50 +35,10 @@ class SearchPage extends StatelessWidget {
       builder: (logic) {
         return Scaffold(
           key: scaffoldKey,
-          bottomNavigationBar: BottomAppBar(
-            color: AppColor.primaryColor,
-            height: 100.d,
-            padding: EdgeInsets.symmetric(horizontal: 15.d, vertical: 15),
-            child: Row(
-              spacing: 10.d,
-              children: [
-                XButton(
-                  onPress: () => Get.back(),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 15.d,
-                      vertical: 15.d,
-                    ),
-                    decoration: xBoxDecoration(
-                      color: AppColor.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.arrow_back_ios_new,
-                      color: AppColor.primaryColor,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: XTextField(
-                    contentPadding: EdgeInsets.zero,
-                    borderRadius: BorderRadius.circular(20.d),
-                    onChanged: (value) {
-                      state.productPagingController.value.refresh();
-                    },
-                    isDense: true,
-                    hintText: AppLocale.searchProduct.tr,
-                    textController: logic.searchTextEditingController,
-                    prefixIcon: Icon(
-                      Icons.search,
-                      size: 20.0.d,
-                      color: AppColor.primaryColor,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          appBar: _appBar(),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: _floatActionButton(),
           body: SizedBox(
             height: Get.height,
             child: Column(
@@ -214,4 +174,64 @@ class SearchPage extends StatelessWidget {
       },
     );
   }
+
+  AppBar _appBar() => AppBar(
+    backgroundColor: AppColor.primaryColor,
+    elevation: 0,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(20.d),
+        bottomRight: Radius.circular(20.d),
+      ),
+    ),
+    leadingWidth: 0.d,
+    toolbarHeight: kToolbarHeight + 30.d,
+    automaticallyImplyLeading: false,
+    automaticallyImplyActions: false,
+    title: Container(
+      padding: EdgeInsetsGeometry.only(bottom: 15.d, top: 15.d),
+      child: Row(
+        spacing: 10.d,
+        children: [
+          Expanded(
+            child: XTextField(
+              contentPadding: EdgeInsets.zero,
+              maxLines: 1,
+              borderRadius: BorderRadius.circular(20.d),
+              onChanged: (value) {
+                logic.onSearch(value);
+              },
+              isDense: true,
+              hintText: AppLocale.searchProduct.tr,
+
+              prefixIcon: Icon(
+                Icons.search,
+                size: 20.0.d,
+                color: AppColor.primaryColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+
+  Widget _floatActionButton() => Container(
+    margin: EdgeInsetsGeometry.symmetric(horizontal: 15.d, vertical: 15.d),
+    width: Get.width,
+    height: 50.d,
+    child: FloatingActionButton.extended(
+      onPressed: () => Get.back(),
+      backgroundColor: AppColor.primaryColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.d)),
+      label: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.arrow_back_ios_new, color: AppColor.white),
+          SizedBox(width: 8.d),
+          Text("Back", style: TextStyle(color: AppColor.white)),
+        ],
+      ),
+    ),
+  );
 }

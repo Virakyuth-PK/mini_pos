@@ -7,6 +7,7 @@ class SearchState {
     firstPageKey: 1,
   ).obs;
   var valueKeyboard = false.obs;
+  var textSearch = ''.obs;
 
   var switcher = true.obs;
   var showCart = false.obs;

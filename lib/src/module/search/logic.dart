@@ -11,8 +11,7 @@ import 'state.dart';
 class SearchLogic extends GetxController {
   final ProductRepo _productRepo = Get.find();
   final SearchState state = SearchState();
-  late StreamSubscription<bool> keyboardSubscription;
-  TextEditingController? searchTextEditingController;
+  Timer? _debounceTimer;
 
   @override
   void onInit() {
@@ -21,14 +20,14 @@ class SearchLogic extends GetxController {
     state.productPagingController.value.addPageRequestListener((pageNo) {
       getListProduct(pageNo: pageNo);
     });
-    searchTextEditingController = TextEditingController();
   }
 
-  @override
-  void dispose() {
-    keyboardSubscription.cancel();
-    // searchTextEditingController?.dispose();
-    super.dispose();
+  Future<void> onSearch(String value) async {
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+      state.textSearch.value = value;
+      state.productPagingController.value.refresh();
+    });
   }
 
   String formatDiscount(Proudct? item) {
@@ -57,7 +56,7 @@ class SearchLogic extends GetxController {
       function: _productRepo.getAllProductPriceChecking(
         pageNo: pageNo,
         storeId: '10017',
-        search: (searchTextEditingController?.text ?? ""),
+        search: state.textSearch.value,
       ),
       isRefresh: isRefresh,
       pageNo: pageNo,
