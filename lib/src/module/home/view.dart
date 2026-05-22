@@ -73,31 +73,58 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _productGridView() {
-    return SizedBox(
-      height: 200.0.d,
-      width: Get.width,
-      child: PagedListView<int, Proudct>.separated(
-        separatorBuilder: (context, index) {
-          return xSpaceH(size: 5.0.d);
-        },
-        scrollDirection: Axis.horizontal,
-        pagingController: state.productPagingController.value,
-        padding: EdgeInsets.zero,
-        builderDelegate: XPagedChildBuilderDelegate.list(
-          newPageProgressIndicatorBuilder: (context) =>
-              Row(children: List.generate(3, (index) => Container().toShimmer)),
-          firstPageProgressIndicatorBuilder: (context) =>
-              Row(children: List.generate(3, (index) => Container().toShimmer)),
-          noItemsFoundIndicatorBuilder: (context) => EmptyData(),
-          firstPageErrorIndicatorBuilder: (context) => EmptyData(),
-          itemBuilder: (context, item, index) {
-            return ProductItem(
-              product: item,
-              discount: logic.formatDiscount(item),
-            );
-          },
-        ),
-      ),
+    return GetBuilder<HomeLogic>(
+      builder: (logic) {
+        if (state.isLoading.value == true) {
+          return ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: 5,
+            separatorBuilder: (_, __) => xSpaceH(size: 5.d),
+            itemBuilder: (_, __) => Container(
+              width: 170.d,
+              height: 200.d,
+              color: Colors.red,
+            ).toShimmer,
+          );
+        }
+        return SizedBox(
+          height: 200.0.d,
+          width: Get.width,
+          child: PagedListView<int, Proudct>.separated(
+            separatorBuilder: (context, index) {
+              return xSpaceH(size: 5.0.d);
+            },
+            scrollDirection: Axis.horizontal,
+            pagingController: state.productPagingController.value,
+            padding: EdgeInsets.zero,
+            builderDelegate: XPagedChildBuilderDelegate.list(
+              newPageProgressIndicatorBuilder: (context) => ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: 5,
+                separatorBuilder: (_, __) => xSpaceH(size: 5.d),
+                itemBuilder: (_, __) => Container(
+                  width: 170.d,
+                  height: 200.d,
+                  color: Colors.red,
+                ).toShimmer,
+              ),
+              noItemsFoundIndicatorBuilder: (context) => EmptyData(),
+              firstPageErrorIndicatorBuilder: (context) => EmptyData(),
+              itemBuilder: (context, item, index) {
+                return XButton(
+                  onPress: () {
+                    Get.toNamed(AppRoute.productDetail, arguments: item);
+                  },
+                  child: ProductItem(
+                    product: item,
+                    discount: logic.formatDiscount(item),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -123,57 +150,63 @@ class HomePage extends StatelessWidget {
           ),
           itemBuilder: (context, item, index) {
             var isActive = state.currentIndex.value == index;
-            return Container(
-              height: 130.0.d,
-              width: 100..d,
-              decoration: xBoxDecoration(
-                color: isActive ? AppColor.primaryColor : Colors.white,
-                boxShadow: [
-                  isActive == true
-                      ? BoxShadow(
-                          color: AppColor.primaryColor.withOpacity(0.08),
-                          blurRadius: 28.d,
-                          offset: const Offset(0, 2),
-                        )
-                      : BoxShadow(
-                          color: AppColor.hintColor.withOpacity(0.08),
-                          blurRadius: 28.d,
-                          offset: const Offset(0, 2),
-                        ),
-                ],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10..d),
-                      child: XNetworkImage(
-                        src: item.image ?? "",
-                        fit: BoxFit.contain,
-                        isNeedErrorDesc: false,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsetsGeometry.symmetric(horizontal: 5.d),
-                      child: Text(
-                        "${item?.nameEn}".toUpperCase(),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: XTextStyle.regular(
-                          fontSize: 11.0.d,
-                          color: isActive ? Colors.white : Color(0xff56575A),
-                          fontWeight: FontWeight.w700,
+            return XButton(
+              onPress: () {
+                if (state.currentIndex.value == index) return;
+                logic.onChangeCategory(index);
+              },
+              child: Container(
+                height: 130.0.d,
+                width: 100..d,
+                decoration: xBoxDecoration(
+                  color: isActive ? AppColor.primaryColor : Colors.white,
+                  boxShadow: [
+                    isActive == true
+                        ? BoxShadow(
+                            color: AppColor.primaryColor.withOpacity(0.08),
+                            blurRadius: 28.d,
+                            offset: const Offset(0, 2),
+                          )
+                        : BoxShadow(
+                            color: AppColor.hintColor.withOpacity(0.08),
+                            blurRadius: 28.d,
+                            offset: const Offset(0, 2),
+                          ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10..d),
+                        child: XNetworkImage(
+                          src: item.image ?? "",
+                          fit: BoxFit.contain,
+                          isNeedErrorDesc: false,
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsetsGeometry.symmetric(horizontal: 5.d),
+                        child: Text(
+                          "${item?.nameEn}".toUpperCase(),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: XTextStyle.regular(
+                            fontSize: 11.0.d,
+                            color: isActive ? Colors.white : Color(0xff56575A),
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           },
@@ -224,16 +257,20 @@ class HomePage extends StatelessWidget {
           right: 40.d,
           child: Container(
             padding: EdgeInsetsGeometry.symmetric(
-              horizontal: 10.d,
+              horizontal: 15.d,
               vertical: 5.d,
             ),
             decoration: xBoxDecoration(
-              color: AppColor.primaryColor.withOpacity(0.2),
+              color: AppColor.primaryColor.withOpacity(0.6),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
               "${state.currentIndexSlide.value + 1} / ${state.imageUrlList.length}",
-              style: XTextStyle.medium(color: AppColor.primaryColor),
+              style: XTextStyle.regular(
+                color: AppColor.white,
+                fontWeight: FontWeight.bold,
+                fontSize: XFontSize.xXS10,
+              ),
             ),
           ),
         ),

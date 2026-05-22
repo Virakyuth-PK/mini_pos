@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mini_pos/core/global_widgets/x_network_image.dart';
 import 'package:mini_pos/core/utils/app_color.dart';
 import 'package:mini_pos/src/module/product_detail/state.dart';
+import '../../../core/utils/app_ext.dart';
 import 'logic.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -21,6 +22,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
 
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: _floatActionButton(),
       body: GetBuilder<ProductDetailLogic>(
         builder: (logic) {
           return CustomProductDetailView(
@@ -36,9 +39,30 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
+  Widget _floatActionButton() => Container(
+    margin: EdgeInsetsGeometry.symmetric(horizontal: 15.d, vertical: 15.d),
+    width: Get.width,
+    height: 50.d,
+    child: FloatingActionButton.extended(
+      onPressed: () => Get.back(),
+      backgroundColor: AppColor.primaryColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.d)),
+      label: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.arrow_back_ios_new, color: AppColor.white),
+          SizedBox(width: 8.d),
+          Text("Back", style: TextStyle(color: AppColor.white)),
+        ],
+      ),
+    ),
+  );
+
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       backgroundColor: Colors.transparent,
+      automaticallyImplyLeading: false,
+      automaticallyImplyActions: false,
       elevation: 0,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios_new),
@@ -74,6 +98,8 @@ class CustomProductDetailView extends StatelessWidget {
           expandedHeight: 250,
           elevation: 0,
           backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          automaticallyImplyActions: false,
           surfaceTintColor: primaryColor,
           flexibleSpace: LayoutBuilder(
             builder: (context, constraints) {
@@ -89,10 +115,10 @@ class CustomProductDetailView extends StatelessWidget {
               );
             },
           ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
-            onPressed: () => Get.back(),
-          ),
+          // leading: IconButton(
+          //   icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          //   onPressed: () => Get.back(),
+          // ),
         ),
         SliverToBoxAdapter(
           child: Column(
@@ -130,6 +156,7 @@ class ProductInfoSection extends StatelessWidget {
   final double price;
   final String? origin;
   final String? stockStatus;
+
   const ProductInfoSection({
     super.key,
 
@@ -244,7 +271,7 @@ class ProductInfoSection extends StatelessWidget {
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Colors.green,
+            color: AppColor.primaryColor,
           ),
         ),
         Row(children: []),

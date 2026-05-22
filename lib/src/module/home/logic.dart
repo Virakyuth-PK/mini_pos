@@ -32,7 +32,7 @@ class HomeLogic extends GetxController {
             ?.map((e) => e.bannerFile?.thumbnailFilePath ?? '')
             .whereType<String>()
             .toList() ??
-        [];
+            [];
 
     update();
   }
@@ -57,6 +57,7 @@ class HomeLogic extends GetxController {
     required int pageNo,
     bool isRefresh = false,
   }) async {
+    state.isLoading.value = true;
     await xPagingDataHandler(
       pagingController: state.productPagingController.value,
       function: _productRepo.getAllProductPriceChecking(
@@ -64,6 +65,11 @@ class HomeLogic extends GetxController {
         storeId: '10017',
         // search: (searchTextEditingController?.text ?? ""),
       ),
+      onComplete: (data) async {
+        state.isLoading.value = false;
+        update();
+        return data;
+      },
       isRefresh: isRefresh,
       pageNo: pageNo,
     );
@@ -87,6 +93,7 @@ class HomeLogic extends GetxController {
 
   void onChangeCategory(int index) {
     state.currentIndex.value = index;
+    state.productPagingController.value.refresh();
     update();
   }
 }
