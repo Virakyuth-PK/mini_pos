@@ -75,6 +75,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/empty_data.svg
   String get emptyData => 'assets/svg/empty_data.svg';
 
+  /// File path: assets/svg/lost_wifi.svg
+  String get lostWifi => 'assets/svg/lost_wifi.svg';
+
   /// File path: assets/svg/no_image.svg
   String get noImage => 'assets/svg/no_image.svg';
 
@@ -82,7 +85,14 @@ class $AssetsSvgGen {
   String get scan => 'assets/svg/scan.svg';
 
   /// List of all assets
-  List<String> get values => [cmgsvg, cmtrLogo, emptyData, noImage, scan];
+  List<String> get values => [
+    cmgsvg,
+    cmtrLogo,
+    emptyData,
+    lostWifi,
+    noImage,
+    scan,
+  ];
 }
 
 class $AssetsIconHomeGen {

@@ -1,12 +1,14 @@
 class AppLocale {
   // Translation Core
   static var noResultFound = "No Result Found";
-  static var connectionLost = "Connection Lost";
-  static var connectionLostDesc = "Connection Lost Desc";
+
   static var technicalError = "Technical Error";
   static var go = "Go";
   static var remove = "Remove";
   static var noInternetConnectionDesc = "No Internet Connection Desc";
+  static var connectionLost = "Connection Lost";
+  static var connectionLostDesc =
+      "Please check your internet connection and try again.";
   static var sorrySomethingWentWrong = "Sorry, something went wrong.";
   static var pending = "Pending";
   static var approved = "Approved";

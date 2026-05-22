@@ -3,22 +3,20 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 
 import '../../gen/assets.gen.dart';
 import '../../translation/app_locale.dart';
-import 'app_ext.dart';
-
-import 'dart:async';
-import 'dart:io';
+import '../utils/app_color.dart';
+import '../utils/app_ext.dart';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 
-import 'app_style.dart';
-import 'text_size.dart';
+import '../utils/app_style.dart';
+import '../utils/text_size.dart';
 
 class ConnectionService extends GetxService with WidgetsBindingObserver {
   final Connectivity _connectivity = Connectivity();
@@ -124,7 +122,16 @@ class ConnectionService extends GetxService with WidgetsBindingObserver {
     if (_overlayEntry != null) return;
     if (Get.overlayContext == null) return;
 
-    _overlayEntry = OverlayEntry(builder: (_) => const _NoInternetOverlay());
+    // _overlayEntry = OverlayEntry(builder: (context) {
+    //
+    // };
+    // showOfflineModal();
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) {
+        return _showOfflineOverlay();
+      },
+    );
 
     Overlay.of(Get.overlayContext!).insert(_overlayEntry!);
   }
@@ -139,74 +146,45 @@ class ConnectionService extends GetxService with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     _timer?.cancel();
     _removeOverlay();
+    if (Get.currentRoute == 'offline_dialog') {
+      Get.back();
+    }
   }
 }
 
-class _NoInternetOverlay extends StatelessWidget {
-  const _NoInternetOverlay();
+Widget _showOfflineOverlay() {
+  return Material(
+    color: Colors.white,
+    child: SizedBox(
+      height: Get.height,
+      width: Get.width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
 
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // dim background
-        Container(color: Colors.black.withOpacity(0.5)),
-        Positioned.fill(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Material(
-                color: Colors.transparent,
-                child: Container(
-                  padding: EdgeInsetsGeometry.symmetric(horizontal: 40.d),
-                  margin: EdgeInsets.all(50.d),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 12,
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20.d),
-                    child: Row(
-                      spacing: 15.d,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(Assets.gif.noInternet.path, width: 50.d),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                AppLocale.connectionLost.tr,
-                                style: XTextStyle.regular(
-                                  color: const Color(0xffEF6C00),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              xSpaceV(size: 8.d),
-                              Text(
-                                AppLocale.connectionLostDesc.tr,
-                                style: XTextStyle.regular(),
-                                textAlign: TextAlign.start,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+        children: [
+          SvgPicture.asset(Assets.svg.lostWifi, width: 120.d),
+          xSpaceV(size: 20.d),
+          Text(
+            AppLocale.connectionLost.tr,
+            style: XTextStyle.regular(
+              color: primaryColor,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
           ),
-        ),
-      ],
-    );
-  }
+
+          xSpaceV(size: 8.d),
+
+          Text(
+            AppLocale.connectionLostDesc.tr,
+            style: XTextStyle.regular(),
+            textAlign: TextAlign.center,
+          ),
+
+          xSpaceV(size: 24.d),
+        ],
+      ),
+    ),
+  );
 }

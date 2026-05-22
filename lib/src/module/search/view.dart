@@ -8,6 +8,7 @@ import 'package:mini_pos/core/global_widgets/x_showmodal_bottom.dart';
 import 'package:mini_pos/core/global_widgets/x_text_field.dart';
 import 'package:mini_pos/core/utils/app_color.dart';
 import 'package:mini_pos/core/utils/text_size.dart';
+import 'package:mini_pos/route/app_route.dart';
 
 import '../../../core/global_widgets/x_button.dart';
 import '../../../core/global_widgets/x_network_image.dart';
@@ -98,6 +99,11 @@ class SearchPage extends StatelessWidget {
                         itemBuilder: (context, item, index) {
                           return XButton(
                             onPress: () {
+                              Get.toNamed(
+                                AppRoute.productDetail,
+                                arguments: item,
+                              );
+                              return;
                               xShowModalBottomSheet(
                                 showBottomButton: true,
                                 customBottomWidget: Container(
@@ -131,60 +137,54 @@ class SearchPage extends StatelessWidget {
                                       BuildContext context,
                                       ScrollController scrollController,
                                     ) {
-                                      return Container(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          spacing: 15.d,
-                                          children: [
-                                            XNetworkImage(
-                                              height: 300.d,
-                                              width: Get.width,
-                                              fit: BoxFit.fitHeight,
-                                              src:
-                                                  '${item.thumbnailImage?.thumbnailFilePath}',
-                                            ),
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        spacing: 15.d,
+                                        children: [
+                                          XNetworkImage(
+                                            height: 300.d,
+                                            width: Get.width,
+                                            fit: BoxFit.fitHeight,
+                                            src:
+                                                '${item.thumbnailImage?.thumbnailFilePath}',
+                                          ),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
 
-                                              children: [
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        "${item.nameKh}",
-                                                        style:
-                                                            XTextStyle.medium(
-                                                              fontSize: 20.d,
-                                                            ),
+                                            children: [
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "${item.nameKh}",
+                                                      style: XTextStyle.medium(
+                                                        fontSize: 20.d,
                                                       ),
-                                                      Text(
-                                                        "${item.nameEn}",
-                                                        style:
-                                                            XTextStyle.medium(
-                                                              fontSize: 20.d,
-                                                            ),
+                                                    ),
+                                                    Text(
+                                                      "${item.nameEn}",
+                                                      style: XTextStyle.medium(
+                                                        fontSize: 20.d,
                                                       ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                  ],
                                                 ),
-                                                Text(
-                                                  "${item.price.toCurrency()}",
-                                                  style: XTextStyle.medium(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 25.d,
-                                                    color:
-                                                        AppColor.primaryColor,
-                                                  ),
+                                              ),
+                                              Text(
+                                                "${item.price.toCurrency()}",
+                                                style: XTextStyle.medium(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 25.d,
+                                                  color: AppColor.primaryColor,
                                                 ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       );
                                     },
                               );
