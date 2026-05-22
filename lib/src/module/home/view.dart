@@ -33,41 +33,34 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.white,
-      floatingActionButton: FloatingActionButton(
-        child: Padding(
-          padding: EdgeInsets.all(15.d),
-          child: SvgPicture.asset(Assets.svg.scan, width: 50.d),
+      floatingActionButton: _floatActionButton(),
+      bottomNavigationBar: _bottomNavigationBar(),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            alignment: AlignmentGeometry.topCenter,
+            image: AssetImage(Assets.icon.home.mainPagePg.path),
+          ),
         ),
-        onPressed: () {
-          print("Tapped small FAB");
-        },
-        backgroundColor: AppColor.primaryColor,
-        shape: const CircleBorder(),
-      ),
-      body: Stack(
-        children: [
-          Image.asset(Assets.icon.home.mainPagePg.path, width: Get.width),
-          SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.d),
-              child: GetBuilder<HomeLogic>(
-                builder: (logic) {
-                  return Column(
-                    spacing: 15.d,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      xSpaceV(),
-                      _buildPromotionSlider(),
-                      _buildCategory(),
-                      Expanded(child: _productGridView()),
-                      Align(alignment: Alignment.center, child: DesignBy()),
-                    ],
-                  );
-                },
+        padding: .symmetric(vertical: 40.d),
+        child: Column(
+          children: [
+            Expanded(flex: 5, child: _buildPromotionSlider()),
+            Expanded(
+              flex: 4,
+              child: Padding(
+                padding: .symmetric(horizontal: 20.d),
+                child: Column(
+                  spacing: 10.d,
+                  children: [
+                    Expanded(flex: 1, child: _buildCategory()),
+                    Expanded(flex: 2, child: _productGridView()),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -206,7 +199,7 @@ class HomePage extends StatelessWidget {
 
   Widget _buildCategory() {
     return SizedBox(
-      height: 165.0.d,
+      // height: 165.0.d,
       width: Get.width,
       child: PagedListView<int, CategoryResponse>.separated(
         padding: EdgeInsets.only(
@@ -267,155 +260,91 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
-
-    return Row(
-      spacing: 15.d,
-      children: [
-        Expanded(
-          flex: 5,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List.generate(5, (index) {
-                var isActive = state.currentIndex.value == index;
-                return Container(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 10.d,
-                    vertical: 15.d,
-                  ),
-                  child: XButton(
-                    onPress: () {
-                      logic.onChangeCategory(index);
-                    },
-                    child: Container(
-                      width: 110.d,
-                      padding: EdgeInsets.symmetric(horizontal: 5.d),
-                      decoration: xBoxDecoration(
-                        borderRadius: BorderRadius.circular(20.d),
-                        boxShadow: [
-                          BoxShadow(
-                            color: isActive
-                                ? AppColor.primaryColor.withValues(alpha: 0.4)
-                                : Colors.black.withValues(alpha: 0.1),
-                            offset: Offset(0, 2),
-                            blurRadius: 4.d,
-                          ),
-                        ],
-                        color: isActive
-                            ? AppColor.primaryColor
-                            : AppColor.white,
-                      ),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            width: 130.d,
-                            child: XNetworkImage(
-                              fit: BoxFit.cover,
-                              src:
-                                  'https://storage.googleapis.com/dev_bucket_cmrt/cmrt-supermarket-media/MainCategory/33/33_1.jpg?t=1779333752',
-                            ),
-                          ),
-                          Text(
-                            "BEER WINE WINE",
-                            style: XTextStyle.medium(
-                              fontWeight: FontWeight.bold,
-                              fontSize: XFontSize.xS12,
-                              color: isActive
-                                  ? AppColor.white
-                                  : AppColor.hintColor,
-                            ),
-
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            ),
-          ),
-        ),
-        XButton(
-          onPress: () {
-            Get.toNamed(AppRoute.search);
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 15.d, horizontal: 15.d),
-            decoration: xBoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColor.primaryColor.withValues(alpha: 0.2),
-            ),
-            child: Icon(Icons.search, color: AppColor.primaryColor, size: 35.d),
-          ),
-        ),
-      ],
-    );
   }
 
   Widget _buildPromotionSlider() {
-    Widget? content;
-    if ((state.imageUrlList ?? []).isNotEmpty) {
-      content = Stack(
-        children: [
-          CarouselSlider.builder(
-            itemCount: state.imageUrlList.length,
-            itemBuilder:
-                (BuildContext context, int itemIndex, int pageViewIndex) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: SizedBox(
-                      height: Get.height,
-                      child: XNetworkImage(
-                        height: Get.height,
-                        src: state.imageUrlList[itemIndex] ?? "",
-                        fit: BoxFit.cover,
+    if (state.imageUrlList.isEmpty) {
+      return SizedBox.shrink();
+    }
+    return SizedBox(
+      height: double.infinity,
+      width: Get.width,
+      child: CarouselSlider.builder(
+        itemCount: state.imageUrlList.length,
+        itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: XNetworkImage(
+              height: double.infinity,
+              src: state.imageUrlList[itemIndex] ?? "",
+              fit: .fitHeight,
+            ),
+          );
+        },
+        options: CarouselOptions(
+          onPageChanged: (index, reason) {
+            state.currentIndexSlide.value = index;
+            logic.update();
+          },
+          height: double.infinity,
+          aspectRatio: 0.2,
+          viewportFraction: 0.9,
+          initialPage: 0,
+          enlargeFactor: 0.2,
+          autoPlay: true,
+          enlargeCenterPage: true,
+        ),
+      ),
+    );
+  }
+
+  FloatingActionButton _floatActionButton() => FloatingActionButton(
+    onPressed: () => Get.toNamed(AppRoute.search),
+    backgroundColor: AppColor.primaryColor,
+    shape: const CircleBorder(),
+    child: Padding(
+      padding: .all(15.d),
+      child: SvgPicture.asset(Assets.svg.scan, width: 50.d),
+    ),
+  );
+
+  Widget _bottomNavigationBar() {
+    return BottomAppBar(
+      height: 60.d,
+      child: Padding(
+        padding: .symmetric(vertical: 5.d),
+        child: Row(
+          mainAxisAlignment: .center,
+          spacing: 10.d,
+          children: [
+            SvgPicture.asset(Assets.svg.cmtrLogo, fit: .fitHeight),
+            VerticalDivider(),
+            SvgPicture.asset(Assets.svg.cmgsvg, fit: .fitHeight),
+            Column(
+              crossAxisAlignment: .start,
+              children: [
+                Text("Develop By", style: XTextStyle.bold(fontSize: 8.d)),
+                Row(
+                  spacing: 5.d,
+                  crossAxisAlignment: .start,
+                  children: [
+                    Text("CHIP MONG", style: XTextStyle.bold(fontSize: 8.d,
+                      fontWeight: .w900,)),
+                    Text(
+                      "GROUP",
+                      style: XTextStyle.bold(
+                        fontSize: 8.d,
+                        fontWeight: .w900,
+                        color: CompanyColor.CHIPMONG_GROUP,
                       ),
                     ),
-                  );
-                },
-            options: CarouselOptions(
-              height: Get.height * 0.5,
-              onPageChanged: (index, reason) {
-                state.currentIndexSlide.value = index;
-                logic.update();
-              },
-              aspectRatio: 0.1,
-              viewportFraction: 0.85,
-              initialPage: 0,
-              enlargeFactor: 0.2,
-              autoPlay: true,
-              enlargeCenterPage: false,
-            ),
-          ),
-
-          Positioned(
-            bottom: 15.d,
-            right: 15.d,
-            child: Obx(
-              () => Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.d, vertical: 5.d),
-                decoration: BoxDecoration(
-                  color: AppColor.primaryColor.withValues(alpha: 0.4),
-                  borderRadius: BorderRadius.circular(20.d),
+                  ],
                 ),
-                child: Text(
-                  "${state.currentIndexSlide.value + 1}/${state.imageUrlList.length}",
-                  style: XTextStyle.medium(
-                    fontWeight: FontWeight.bold,
-                    fontSize: XFontSize.xS12,
-                    color: AppColor.primaryColor,
-                  ),
-                ),
-              ),
+              ],
             ),
-          ),
-        ],
-      );
-    } else {
-      content = const SizedBox.shrink();
-    }
-    return content;
+          ],
+        ),
+      ),
+    );
   }
 }
