@@ -30,45 +30,21 @@ class xLoading extends StatelessWidget {
       width: Get.width,
       child: Padding(
         padding: xPadding(multiply: .05),
-        child: ZoAnimatedGradientBorder(
-          borderRadius: xRadiusValue * 2.9,
-          animationCurve: Curves.linear,
-          glowOpacity: 1,
-          borderThickness: 1,
-          gradientColor: borderColor,
-          animationDuration: Duration(seconds: 2),
-          child: ClipRRect(
-            borderRadius: xBorderRadius,
-            child: Stack(
+        child: ClipRRect(
+          borderRadius: xBorderRadius,
+          child: Center(
+            child: Column(
+              crossAxisAlignment: .center,
+              mainAxisAlignment: .center,
               children: [
-                Opacity(
-                  opacity: .75,
-                  child: AnimateGradient(
-                    primaryBeginGeometry: const AlignmentDirectional(0, 1),
-                    primaryEndGeometry: const AlignmentDirectional(0, 2),
-                    secondaryBeginGeometry: const AlignmentDirectional(2, 0),
-                    secondaryEndGeometry: const AlignmentDirectional(0, -0.8),
-                    textDirectionForGeometry: TextDirection.rtl,
-                    duration: Duration(seconds: 2),
-                    primaryColors: listColor,
-                    secondaryColors: listColor.reversed.toList(),
-                  ),
+                Image.asset(
+                  // Assets.icon.logoSolidDevWhite.path,
+                  Assets.gif.cmrtLoading.path,
+                  width: Get.width * 0.4,
                 ),
-                Center(
-                  child: Column(
-                    crossAxisAlignment: .center,
-                    mainAxisAlignment: .center,
-                    children: [
-                      Image.asset(
-                        Assets.icon.logoSolidProdWhite.path,
-                        width: Get.width * 0.75,
-                      ),
-                      LoadingAnimationWidget.stretchedDots(
-                        size: 50.d,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
+                LoadingAnimationWidget.stretchedDots(
+                  size: 50.d,
+                  color: primaryColor,
                 ),
               ],
             ),

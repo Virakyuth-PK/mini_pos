@@ -1,3 +1,5 @@
+import 'package:mini_pos/src/module/product_detail/binding.dart';
+import 'package:mini_pos/src/module/product_detail/view.dart';
 import 'package:mini_pos/src/module/search/binding.dart';
 import 'package:mini_pos/src/module/search/view.dart';
 
@@ -13,6 +15,7 @@ class AppRoute {
   static const splash = '/';
   static const home = '/home';
   static const search = '/search';
+  static const productDetail = "/product_detail";
 
   static final pages = [
     customGetPage(
@@ -26,6 +29,11 @@ class AppRoute {
       name: search,
       page: () => SearchPage(),
       binding: SearchBinding(),
+    ),
+    customGetPage(
+      name: productDetail,
+      page: () => ProductDetailPage(),
+      binding: ProductDetailBinding(),
     ),
   ];
 }
