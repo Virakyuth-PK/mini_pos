@@ -1,3 +1,5 @@
+import '../../../src/model/category_response/category_response.dart';
+import '../../../src/model/promotion_response/promotion_response.dart';
 import '../../../src/model/proudct/proudct.dart';
 
 class Paging<T> {
@@ -33,7 +35,11 @@ class Paging<T> {
   }
 
   static final Map<Type, dynamic Function(Map<String, dynamic>)> _dataFactory =
-      {Proudct: Proudct.fromJson};
+      {
+        Proudct: Proudct.fromJson,
+        PromotionResponse: PromotionResponse.fromJson,
+        CategoryResponse: CategoryResponse.fromJson,
+      };
 
   static dynamic factoryDataList(Type type, dynamic data) {
     if (data is String || data is num || data is bool) {

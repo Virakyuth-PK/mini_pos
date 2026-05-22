@@ -314,11 +314,12 @@ class HomePage extends StatelessWidget {
                 state.currentIndexSlide.value = index;
                 logic.update();
               },
+              aspectRatio: 0.1,
+              viewportFraction: 0.85,
+              initialPage: 0,
+              enlargeFactor: 0.2,
               autoPlay: true,
               enlargeCenterPage: false,
-              viewportFraction: 1.0,
-              aspectRatio: 1.0,
-              initialPage: 2,
             ),
           ),
 

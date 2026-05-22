@@ -1,9 +1,17 @@
 import 'package:get/get.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:mini_pos/src/model/category_response/category_response.dart';
+
+import '../../model/proudct/proudct.dart';
 
 class HomeState {
-  var imageUrlList = <String>[
-    'https://storage.googleapis.com/dev_bucket_cmrt/cmrt-mall-media/Article/62/62_Background_1.png?t=1779332421?t=1779332425347',
-  ];
+  var productPagingController = PagingController<int, Proudct>(
+    firstPageKey: 1,
+  ).obs;
+  var categoryPagingController = PagingController<int, CategoryResponse>(
+    firstPageKey: 1,
+  ).obs;
+  var imageUrlList = <String>[];
   var currentIndex = 0.obs;
   var currentIndexSlide = 0.obs;
 }

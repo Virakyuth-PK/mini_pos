@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:encrypt/encrypt.dart' as encrypt;
+
+// import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:intl/intl.dart';
 import 'package:mini_pos/core/utils/screen_util.dart';
 import 'package:package_info_plus/package_info_plus.dart';
