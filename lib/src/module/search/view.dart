@@ -17,6 +17,7 @@ import '../../../core/utils/app_style.dart';
 import '../../../core/utils/x_paged_child_builder_delegate.dart';
 import '../../../translation/app_locale.dart';
 import '../../model/proudct/proudct.dart';
+import '../widget/product_item.dart';
 import 'logic.dart';
 import 'state.dart';
 
@@ -90,7 +91,7 @@ class SearchPage extends StatelessWidget {
                       pagingController: state.productPagingController.value,
                       builderDelegate: XPagedChildBuilderDelegate.grid(
                         crossAxisCount: 2,
-                        childAspectRatio: 0.61,
+                        childAspectRatio: 1,
                         newPageProgressIndicatorBuilder: (context) =>
                             Container().toShimmer,
                         isNeedShowFullScreenNoItemsFoundIndicatorBuilder: true,
@@ -188,69 +189,21 @@ class SearchPage extends StatelessWidget {
                                     },
                               );
                             },
-                            child: Container(
-                              decoration: xBoxDecoration(hasShadow: true),
-                              child: Column(
-                                spacing: 5.d,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: XNetworkImage(
-                                        height: 120.d,
-                                        width: Get.width,
-                                        fit: BoxFit.cover,
-                                        src:
-                                            '${item.thumbnailImage?.thumbnailFilePath ?? ''}',
-                                      ),
-                                    ),
-                                  ),
-
-                                  Padding(
-                                    padding: EdgeInsetsGeometry.symmetric(
-                                      horizontal: 10.d,
-                                      vertical: 5.d,
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${item.nameEn}',
-                                          style: XTextStyle.regular(),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        Text(
-                                          '${item.nameKh}',
-                                          style: XTextStyle.regular(),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        Text(
-                                          "${item.price.toCurrency()}",
-                                          style: XTextStyle.medium(
-                                            color: AppColor.primaryColor,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                            child: ProductItem(
+                              product: item,
+                              height: Get.width,
+                              width: Get.height,
+                              discount: logic.formatDiscount(item),
                             ),
                           );
                         },
                       ),
                       padding: EdgeInsets.all(10.0.d),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 15,
-                            mainAxisSpacing: 15,
-                          ),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 7.d,
+                        mainAxisSpacing: 7.d,
+                      ),
                     ),
                   ),
                 ),

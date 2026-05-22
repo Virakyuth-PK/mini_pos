@@ -3,6 +3,7 @@ import 'package:mini_pos/src/data/repo/product_repo.dart';
 
 import '../../../core/utils/x_paging_data_handler.dart';
 import '../../data/repo/promotion_repo.dart';
+import '../../model/proudct/proudct.dart';
 import 'state.dart';
 
 class HomeLogic extends GetxController {
@@ -36,6 +37,22 @@ class HomeLogic extends GetxController {
     update();
   }
 
+  String formatDiscount(Proudct? item) {
+    double discountValue = 0;
+    if (item?.isPLU ?? false) {
+      discountValue = (item?.discountValue ?? 0) / 10;
+    } else {
+      discountValue = (item?.discountValue ?? 0);
+    }
+    if (discountValue % 1 == 0) {
+      return "${discountValue.toInt()}% OFF";
+    } else if (discountValue % 1 == 0.5) {
+      return "${discountValue.toStringAsFixed(1)}% OFF";
+    } else {
+      return "$discountValue% OFF";
+    }
+  }
+
   Future<void> getListProduct({
     required int pageNo,
     bool isRefresh = false,
@@ -60,7 +77,6 @@ class HomeLogic extends GetxController {
       pagingController: state.categoryPagingController.value,
       function: _productRepo.getCategory(
         pageNo: pageNo,
-
         storeId: '10017',
         // search: (searchTextEditingController?.text ?? ""),
       ),

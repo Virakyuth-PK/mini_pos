@@ -68,6 +68,7 @@ class ProductRepo implements IProductRepo {
         "StoreId": storeId,
         "PageNo": "${pageNo ?? 1}",
         "PageSize": "${pageSize ?? 10}",
+        "IsActive": "${true}",
       },
       endPoint: ApiEndpoint.product(ProductEndpoint.Get_All_Category),
     );

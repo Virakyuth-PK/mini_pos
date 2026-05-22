@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:mini_pos/src/data/repo/product_repo.dart';
 
 import '../../../core/utils/x_paging_data_handler.dart';
+import '../../model/proudct/proudct.dart';
 import 'state.dart';
 
 class SearchLogic extends GetxController {
@@ -28,6 +29,22 @@ class SearchLogic extends GetxController {
     keyboardSubscription.cancel();
     // searchTextEditingController?.dispose();
     super.dispose();
+  }
+
+  String formatDiscount(Proudct? item) {
+    double discountValue = 0;
+    if (item?.isPLU ?? false) {
+      discountValue = (item?.discountValue ?? 0) / 10;
+    } else {
+      discountValue = (item?.discountValue ?? 0);
+    }
+    if (discountValue % 1 == 0) {
+      return "${discountValue.toInt()}% OFF";
+    } else if (discountValue % 1 == 0.5) {
+      return "${discountValue.toStringAsFixed(1)}% OFF";
+    } else {
+      return "$discountValue% OFF";
+    }
   }
 
   //region Product
