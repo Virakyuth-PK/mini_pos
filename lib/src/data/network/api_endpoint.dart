@@ -11,7 +11,7 @@ class ApiEndpoint {
       case ProductEndpoint.Get_All:
         return '$path/ItemPrice/GetAllPriceChecking';
       case ProductEndpoint.Get_All_Category:
-        return '$path/MainCategory/Get';
+        return '$path/MainCategory/GetAll';
     }
   }
 

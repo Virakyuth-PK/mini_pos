@@ -60,6 +60,7 @@ class HomeLogic extends GetxController {
       pagingController: state.categoryPagingController.value,
       function: _productRepo.getCategory(
         pageNo: pageNo,
+
         storeId: '10017',
         // search: (searchTextEditingController?.text ?? ""),
       ),

@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mini_pos/core/global_widgets/design_by.dart';
 import 'package:mini_pos/core/utils/app_color.dart';
 import 'package:mini_pos/core/utils/app_style.dart';
@@ -14,8 +15,11 @@ import '../../../core/global_widgets/x_button.dart';
 import '../../../core/global_widgets/x_network_image.dart';
 import '../../../core/global_widgets/x_showmodal_bottom.dart';
 import '../../../core/utils/app_ext.dart';
+import '../../../core/utils/loading_shimmer.dart';
+import '../../../core/utils/x_paged_child_builder_delegate.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../translation/app_locale.dart';
+import '../../model/category_response/category_response.dart';
 import 'logic.dart';
 import 'state.dart';
 
@@ -201,6 +205,69 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildCategory() {
+    return SizedBox(
+      height: 165.0.d,
+      width: Get.width,
+      child: PagedListView<int, CategoryResponse>.separated(
+        padding: EdgeInsets.only(
+          right: 15..d,
+          top: 15..d,
+          bottom: 10..d,
+          left: 1.0.d,
+        ),
+        separatorBuilder: (context, index) => xSpaceH(),
+        pagingController: state.categoryPagingController.value,
+        scrollDirection: Axis.horizontal,
+        builderDelegate: XPagedChildBuilderDelegate.list(
+          scrollDirection: Axis.horizontal,
+          firstPageProgressIndicatorBuilder: (context) => LoadingShimmer.list(
+            width: 150..d,
+            scrollDirection: Axis.horizontal,
+          ),
+          itemBuilder: (context, item, index) {
+            var isActive = state.currentIndex.value == index;
+            return Container(
+              height: 180.0.d,
+              width: 120..d,
+              decoration: xBoxDecoration(color: Colors.white, hasShadow: true),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10..d),
+                      child: XNetworkImage(
+                        src: item.image ?? "",
+                        fit: BoxFit.contain,
+                        isNeedErrorDesc: false,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "${item?.nameEn}".toUpperCase(),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: XTextStyle.regular(
+                          fontSize: 11.0.d,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+
     return Row(
       spacing: 15.d,
       children: [
