@@ -9,7 +9,9 @@ import 'package:mini_pos/core/global_widgets/design_by.dart';
 import 'package:mini_pos/core/utils/app_color.dart';
 import 'package:mini_pos/core/utils/app_style.dart';
 import 'package:mini_pos/core/utils/text_size.dart';
+import 'package:mini_pos/flavors.dart';
 import 'package:mini_pos/route/app_route.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../core/global_widgets/x_button.dart';
 import '../../../core/global_widgets/x_network_image.dart';
@@ -310,9 +312,9 @@ class HomePage extends StatelessWidget {
 
   Widget _bottomNavigationBar() {
     return BottomAppBar(
-      height: 60.d,
+      height: 50.d,
       child: Padding(
-        padding: .symmetric(vertical: 5.d),
+        padding: .symmetric(vertical: 2.d),
         child: Row(
           mainAxisAlignment: .center,
           spacing: 10.d,
@@ -321,6 +323,7 @@ class HomePage extends StatelessWidget {
             VerticalDivider(),
             SvgPicture.asset(Assets.svg.cmgsvg, fit: .fitHeight),
             Column(
+              spacing: 4.d,
               crossAxisAlignment: .start,
               children: [
                 Text("Develop By", style: XTextStyle.bold(fontSize: 8.d)),
@@ -328,8 +331,10 @@ class HomePage extends StatelessWidget {
                   spacing: 5.d,
                   crossAxisAlignment: .start,
                   children: [
-                    Text("CHIP MONG", style: XTextStyle.bold(fontSize: 8.d,
-                      fontWeight: .w900,)),
+                    Text(
+                      "CHIP MONG",
+                      style: XTextStyle.bold(fontSize: 8.d, fontWeight: .w900),
+                    ),
                     Text(
                       "GROUP",
                       style: XTextStyle.bold(
@@ -342,9 +347,43 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
+            Align(
+              alignment: .bottomLeft,
+              child: Padding(
+                padding: .only(bottom: 2.d),
+                child: FutureBuilder<String>(
+                  future: _getVersion(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const SizedBox.shrink();
+                    }
+
+                    return Text(
+                      snapshot.data ?? '',
+                      style: XTextStyle.regular(
+                        fontSize: 7.d,
+                        color:  Colors.grey,
+                      ),
+                    );
+                  },
+                )
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<String> _getVersion() async {
+    final info = await PackageInfo.fromPlatform();
+
+    // Release mode
+    if (FConfig.appFlavor == Flavor.prd) {
+      return 'v${info.version}';
+    }
+
+    // Dev / Debug mode
+    return 'v${info.version} (${info.buildNumber})';
   }
 }
