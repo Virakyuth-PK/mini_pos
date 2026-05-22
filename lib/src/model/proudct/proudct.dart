@@ -23,6 +23,10 @@ abstract class Proudct with _$Proudct {
     String? categoryCode,
     String? subCategoryCode,
     double? price,
+    int? discountTypeId,
+    double? discountValue,
+    double? offerPrice,
+    bool? isPLU,
     ImageResponse? thumbnailImage,
   }) = _Proudct;
 

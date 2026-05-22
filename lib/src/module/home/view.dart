@@ -9,19 +9,20 @@ import 'package:mini_pos/core/global_widgets/design_by.dart';
 import 'package:mini_pos/core/utils/app_color.dart';
 import 'package:mini_pos/core/utils/app_style.dart';
 import 'package:mini_pos/core/utils/text_size.dart';
-import 'package:mini_pos/flavors.dart';
 import 'package:mini_pos/route/app_route.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:mini_pos/src/module/widget/product_item.dart';
 
 import '../../../core/global_widgets/x_button.dart';
 import '../../../core/global_widgets/x_network_image.dart';
 import '../../../core/global_widgets/x_showmodal_bottom.dart';
 import '../../../core/utils/app_ext.dart';
+import '../../../core/utils/empty_data.dart';
 import '../../../core/utils/loading_shimmer.dart';
 import '../../../core/utils/x_paged_child_builder_delegate.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../translation/app_locale.dart';
 import '../../model/category_response/category_response.dart';
+import '../../model/proudct/proudct.dart';
 import 'logic.dart';
 import 'state.dart';
 
@@ -45,172 +46,73 @@ class HomePage extends StatelessWidget {
           ),
         ),
         padding: .symmetric(vertical: 40.d),
-        child: Column(
-          children: [
-            Expanded(flex: 5, child: _buildPromotionSlider()),
-            Expanded(
-              flex: 4,
-              child: Padding(
-                padding: .symmetric(horizontal: 20.d),
-                child: Column(
-                  spacing: 10.d,
-                  children: [
-                    Expanded(flex: 1, child: _buildCategory()),
-                    Expanded(flex: 2, child: _productGridView()),
-                  ],
+        child: GetBuilder<HomeLogic>(
+          builder: (logic) {
+            return Column(
+              children: [
+                Expanded(flex: 6, child: _buildPromotionSlider()),
+                Expanded(
+                  flex: 4,
+                  child: Padding(
+                    padding: .symmetric(horizontal: 20.d),
+                    child: Column(
+                      spacing: 10.d,
+                      children: [
+                        _buildCategory(),
+                        Expanded(flex: 3, child: _productGridView()),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
   Widget _productGridView() {
-    return GridView.builder(
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: 3,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 15.d,
-        crossAxisSpacing: 15.d,
-        childAspectRatio: 1,
-      ),
-      itemBuilder: (context, index) {
-        return XButton(
-          onPress: () {
-            xShowModalBottomSheet(
-              showBottomButton: true,
-              customBottomWidget: Container(
-                margin: EdgeInsets.only(top: 15.d),
-                child: XButton(
-                  onPress: () {
-                    Get.back();
-                  },
-                  child: Container(
-                    width: Get.width,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 50.d,
-                      vertical: 15.d,
-                    ),
-                    decoration: xBoxDecoration(color: AppColor.primaryColor),
-                    child: Center(
-                      child: Text(
-                        AppLocale.back.tr,
-                        style: XTextStyle.large(color: AppColor.white),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              body: (BuildContext context, ScrollController scrollController) {
-                return Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 15.d,
-                    children: [
-                      XNetworkImage(
-                        height: 300.d,
-                        width: Get.width,
-                        fit: BoxFit.fitHeight,
-                        src:
-                            'https://storage.googleapis.com/dev_bucket_cmrt/cmrt-supermarket-media/Item/028400003575/028400003575_1_thumbnail.png?t=1779338414',
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'NR-SDACH NEAK MEAS',
-                                  style: XTextStyle.medium(fontSize: 20.d),
-                                ),
-                                Text(
-                                  'ស្ដេចនាគមាស',
-                                  style: XTextStyle.medium(fontSize: 20.d),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Text(
-                            "${double.parse('12.2').toCurrency()}/ KG",
-                            style: XTextStyle.medium(
-                              color: AppColor.primaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              },
+    return SizedBox(
+      height: 200.0.d,
+      width: Get.width,
+      child: PagedListView<int, Proudct>.separated(
+        separatorBuilder: (context, index) {
+          return xSpaceH(size: 5.0.d);
+        },
+        scrollDirection: Axis.horizontal,
+        pagingController: state.productPagingController.value,
+        padding: EdgeInsets.zero,
+        builderDelegate: XPagedChildBuilderDelegate.list(
+          newPageProgressIndicatorBuilder: (context) =>
+              Row(children: List.generate(3, (index) => Container().toShimmer)),
+          firstPageProgressIndicatorBuilder: (context) =>
+              Row(children: List.generate(3, (index) => Container().toShimmer)),
+          noItemsFoundIndicatorBuilder: (context) => EmptyData(),
+          firstPageErrorIndicatorBuilder: (context) => EmptyData(),
+          itemBuilder: (context, item, index) {
+            return ProductItem(
+              product: item,
+              discount: logic.formatDiscount(item),
             );
           },
-          child: Container(
-            decoration: xBoxDecoration(hasShadow: true),
-            child: Padding(
-              padding: EdgeInsets.all(8.0.d),
-              child: Column(
-                spacing: 5.d,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: XNetworkImage(
-                        width: Get.width,
-                        height: 100.d,
-                        fit: BoxFit.fitHeight,
-                        src:
-                            'https://storage.googleapis.com/dev_bucket_cmrt/cmrt-supermarket-media/Item/028400003575/028400003575_1_thumbnail.png?t=1779338414',
-                      ),
-                    ),
-                  ),
-                  Text(
-                    'NR-SDACH NEAK MEAS',
-                    style: XTextStyle.regular(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    'ស្ដេចនាគមាស',
-                    style: XTextStyle.regular(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    "${double.parse('12.2').toCurrency()}/ KG",
-                    style: XTextStyle.medium(
-                      color: AppColor.primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
+        ),
+      ),
     );
   }
 
   Widget _buildCategory() {
     return SizedBox(
-      // height: 165.0.d,
+      height: 140.0.d,
       width: Get.width,
       child: PagedListView<int, CategoryResponse>.separated(
         padding: EdgeInsets.only(
           right: 15..d,
           top: 15..d,
           bottom: 10..d,
-          left: 1.0.d,
+          left: 15.0.d,
         ),
-        separatorBuilder: (context, index) => xSpaceH(),
+        separatorBuilder: (context, index) => xSpaceH(size: 20.d),
         pagingController: state.categoryPagingController.value,
         scrollDirection: Axis.horizontal,
         builderDelegate: XPagedChildBuilderDelegate.list(
@@ -222,9 +124,24 @@ class HomePage extends StatelessWidget {
           itemBuilder: (context, item, index) {
             var isActive = state.currentIndex.value == index;
             return Container(
-              height: 180.0.d,
-              width: 120..d,
-              decoration: xBoxDecoration(color: Colors.white, hasShadow: true),
+              height: 130.0.d,
+              width: 100..d,
+              decoration: xBoxDecoration(
+                color: isActive ? AppColor.primaryColor : Colors.white,
+                boxShadow: [
+                  isActive == true
+                      ? BoxShadow(
+                          color: AppColor.primaryColor.withOpacity(0.08),
+                          blurRadius: 28.d,
+                          offset: const Offset(0, 2),
+                        )
+                      : BoxShadow(
+                          color: AppColor.hintColor.withOpacity(0.08),
+                          blurRadius: 28.d,
+                          offset: const Offset(0, 2),
+                        ),
+                ],
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -242,7 +159,7 @@ class HomePage extends StatelessWidget {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsetsGeometry.symmetric(horizontal: 5.d),
                       child: Text(
                         "${item?.nameEn}".toUpperCase(),
                         textAlign: TextAlign.center,
@@ -250,6 +167,7 @@ class HomePage extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: XTextStyle.regular(
                           fontSize: 11.0.d,
+                          color: isActive ? Colors.white : Color(0xff56575A),
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -268,35 +186,58 @@ class HomePage extends StatelessWidget {
     if (state.imageUrlList.isEmpty) {
       return SizedBox.shrink();
     }
-    return SizedBox(
-      height: double.infinity,
-      width: Get.width,
-      child: CarouselSlider.builder(
-        itemCount: state.imageUrlList.length,
-        itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: XNetworkImage(
-              height: double.infinity,
-              src: state.imageUrlList[itemIndex] ?? "",
-              fit: .fitHeight,
-            ),
-          );
-        },
-        options: CarouselOptions(
-          onPageChanged: (index, reason) {
-            state.currentIndexSlide.value = index;
-            logic.update();
-          },
+    return Stack(
+      children: [
+        SizedBox(
           height: double.infinity,
-          aspectRatio: 0.2,
-          viewportFraction: 0.9,
-          initialPage: 0,
-          enlargeFactor: 0.2,
-          autoPlay: true,
-          enlargeCenterPage: true,
+          width: Get.width,
+          child: CarouselSlider.builder(
+            itemCount: state.imageUrlList.length,
+            itemBuilder:
+                (BuildContext context, int itemIndex, int pageViewIndex) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: XNetworkImage(
+                      height: double.infinity,
+                      src: state.imageUrlList[itemIndex] ?? "",
+                      fit: .fitHeight,
+                    ),
+                  );
+                },
+            options: CarouselOptions(
+              onPageChanged: (index, reason) {
+                state.currentIndexSlide.value = index;
+                logic.update();
+              },
+              height: double.infinity,
+              aspectRatio: 0.2,
+              viewportFraction: 0.9,
+              initialPage: 0,
+              enlargeFactor: 0.2,
+              autoPlay: true,
+              enlargeCenterPage: true,
+            ),
+          ),
         ),
-      ),
+        Positioned(
+          bottom: 15.d,
+          right: 40.d,
+          child: Container(
+            padding: EdgeInsetsGeometry.symmetric(
+              horizontal: 10.d,
+              vertical: 5.d,
+            ),
+            decoration: xBoxDecoration(
+              color: AppColor.primaryColor.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              "${state.currentIndexSlide.value + 1} / ${state.imageUrlList.length}",
+              style: XTextStyle.medium(color: AppColor.primaryColor),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -312,9 +253,9 @@ class HomePage extends StatelessWidget {
 
   Widget _bottomNavigationBar() {
     return BottomAppBar(
-      height: 50.d,
+      height: 60.d,
       child: Padding(
-        padding: .symmetric(vertical: 2.d),
+        padding: .symmetric(vertical: 5.d),
         child: Row(
           mainAxisAlignment: .center,
           spacing: 10.d,
@@ -323,7 +264,6 @@ class HomePage extends StatelessWidget {
             VerticalDivider(),
             SvgPicture.asset(Assets.svg.cmgsvg, fit: .fitHeight),
             Column(
-              spacing: 4.d,
               crossAxisAlignment: .start,
               children: [
                 Text("Develop By", style: XTextStyle.bold(fontSize: 8.d)),
@@ -347,43 +287,9 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-            Align(
-              alignment: .bottomLeft,
-              child: Padding(
-                padding: .only(bottom: 2.d),
-                child: FutureBuilder<String>(
-                  future: _getVersion(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const SizedBox.shrink();
-                    }
-
-                    return Text(
-                      snapshot.data ?? '',
-                      style: XTextStyle.regular(
-                        fontSize: 7.d,
-                        color:  Colors.grey,
-                      ),
-                    );
-                  },
-                )
-              ),
-            ),
           ],
         ),
       ),
     );
-  }
-
-  Future<String> _getVersion() async {
-    final info = await PackageInfo.fromPlatform();
-
-    // Release mode
-    if (FConfig.appFlavor == Flavor.prd) {
-      return 'v${info.version}';
-    }
-
-    // Dev / Debug mode
-    return 'v${info.version} (${info.buildNumber})';
   }
 }

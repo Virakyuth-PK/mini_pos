@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Proudct {
 
- String? get barcode; set barcode(String? value); dynamic get oldBarcode; set oldBarcode(dynamic value); String? get sku; set sku(String? value); String? get storeId; set storeId(String? value); dynamic get barcodeType; set barcodeType(dynamic value); String? get nameEn; set nameEn(String? value); String? get nameKh; set nameKh(String? value); dynamic get mobileNameEn; set mobileNameEn(dynamic value); dynamic get mobileNameKh; set mobileNameKh(dynamic value); dynamic get divisionCode; set divisionCode(dynamic value); String? get departmentCode; set departmentCode(String? value); String? get categoryCode; set categoryCode(String? value); String? get subCategoryCode; set subCategoryCode(String? value); double? get price; set price(double? value); ImageResponse? get thumbnailImage; set thumbnailImage(ImageResponse? value);
+ String? get barcode; set barcode(String? value); dynamic get oldBarcode; set oldBarcode(dynamic value); String? get sku; set sku(String? value); String? get storeId; set storeId(String? value); dynamic get barcodeType; set barcodeType(dynamic value); String? get nameEn; set nameEn(String? value); String? get nameKh; set nameKh(String? value); dynamic get mobileNameEn; set mobileNameEn(dynamic value); dynamic get mobileNameKh; set mobileNameKh(dynamic value); dynamic get divisionCode; set divisionCode(dynamic value); String? get departmentCode; set departmentCode(String? value); String? get categoryCode; set categoryCode(String? value); String? get subCategoryCode; set subCategoryCode(String? value); double? get price; set price(double? value); int? get discountTypeId; set discountTypeId(int? value); double? get discountValue; set discountValue(double? value); double? get offerPrice; set offerPrice(double? value); bool? get isPLU; set isPLU(bool? value); ImageResponse? get thumbnailImage; set thumbnailImage(ImageResponse? value);
 /// Create a copy of Proudct
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,7 +30,7 @@ $ProudctCopyWith<Proudct> get copyWith => _$ProudctCopyWithImpl<Proudct>(this as
 
 @override
 String toString() {
-  return 'Proudct(barcode: $barcode, oldBarcode: $oldBarcode, sku: $sku, storeId: $storeId, barcodeType: $barcodeType, nameEn: $nameEn, nameKh: $nameKh, mobileNameEn: $mobileNameEn, mobileNameKh: $mobileNameKh, divisionCode: $divisionCode, departmentCode: $departmentCode, categoryCode: $categoryCode, subCategoryCode: $subCategoryCode, price: $price, thumbnailImage: $thumbnailImage)';
+  return 'Proudct(barcode: $barcode, oldBarcode: $oldBarcode, sku: $sku, storeId: $storeId, barcodeType: $barcodeType, nameEn: $nameEn, nameKh: $nameKh, mobileNameEn: $mobileNameEn, mobileNameKh: $mobileNameKh, divisionCode: $divisionCode, departmentCode: $departmentCode, categoryCode: $categoryCode, subCategoryCode: $subCategoryCode, price: $price, discountTypeId: $discountTypeId, discountValue: $discountValue, offerPrice: $offerPrice, isPLU: $isPLU, thumbnailImage: $thumbnailImage)';
 }
 
 
@@ -41,7 +41,7 @@ abstract mixin class $ProudctCopyWith<$Res>  {
   factory $ProudctCopyWith(Proudct value, $Res Function(Proudct) _then) = _$ProudctCopyWithImpl;
 @useResult
 $Res call({
- String? barcode, dynamic oldBarcode, String? sku, String? storeId, dynamic barcodeType, String? nameEn, String? nameKh, dynamic mobileNameEn, dynamic mobileNameKh, dynamic divisionCode, String? departmentCode, String? categoryCode, String? subCategoryCode, double? price, ImageResponse? thumbnailImage
+ String? barcode, dynamic oldBarcode, String? sku, String? storeId, dynamic barcodeType, String? nameEn, String? nameKh, dynamic mobileNameEn, dynamic mobileNameKh, dynamic divisionCode, String? departmentCode, String? categoryCode, String? subCategoryCode, double? price, int? discountTypeId, double? discountValue, double? offerPrice, bool? isPLU, ImageResponse? thumbnailImage
 });
 
 
@@ -58,7 +58,7 @@ class _$ProudctCopyWithImpl<$Res>
 
 /// Create a copy of Proudct
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? barcode = freezed,Object? oldBarcode = freezed,Object? sku = freezed,Object? storeId = freezed,Object? barcodeType = freezed,Object? nameEn = freezed,Object? nameKh = freezed,Object? mobileNameEn = freezed,Object? mobileNameKh = freezed,Object? divisionCode = freezed,Object? departmentCode = freezed,Object? categoryCode = freezed,Object? subCategoryCode = freezed,Object? price = freezed,Object? thumbnailImage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? barcode = freezed,Object? oldBarcode = freezed,Object? sku = freezed,Object? storeId = freezed,Object? barcodeType = freezed,Object? nameEn = freezed,Object? nameKh = freezed,Object? mobileNameEn = freezed,Object? mobileNameKh = freezed,Object? divisionCode = freezed,Object? departmentCode = freezed,Object? categoryCode = freezed,Object? subCategoryCode = freezed,Object? price = freezed,Object? discountTypeId = freezed,Object? discountValue = freezed,Object? offerPrice = freezed,Object? isPLU = freezed,Object? thumbnailImage = freezed,}) {
   return _then(_self.copyWith(
 barcode: freezed == barcode ? _self.barcode : barcode // ignore: cast_nullable_to_non_nullable
 as String?,oldBarcode: freezed == oldBarcode ? _self.oldBarcode : oldBarcode // ignore: cast_nullable_to_non_nullable
@@ -74,7 +74,11 @@ as dynamic,departmentCode: freezed == departmentCode ? _self.departmentCode : de
 as String?,categoryCode: freezed == categoryCode ? _self.categoryCode : categoryCode // ignore: cast_nullable_to_non_nullable
 as String?,subCategoryCode: freezed == subCategoryCode ? _self.subCategoryCode : subCategoryCode // ignore: cast_nullable_to_non_nullable
 as String?,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as double?,thumbnailImage: freezed == thumbnailImage ? _self.thumbnailImage : thumbnailImage // ignore: cast_nullable_to_non_nullable
+as double?,discountTypeId: freezed == discountTypeId ? _self.discountTypeId : discountTypeId // ignore: cast_nullable_to_non_nullable
+as int?,discountValue: freezed == discountValue ? _self.discountValue : discountValue // ignore: cast_nullable_to_non_nullable
+as double?,offerPrice: freezed == offerPrice ? _self.offerPrice : offerPrice // ignore: cast_nullable_to_non_nullable
+as double?,isPLU: freezed == isPLU ? _self.isPLU : isPLU // ignore: cast_nullable_to_non_nullable
+as bool?,thumbnailImage: freezed == thumbnailImage ? _self.thumbnailImage : thumbnailImage // ignore: cast_nullable_to_non_nullable
 as ImageResponse?,
   ));
 }
@@ -172,10 +176,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? barcode,  dynamic oldBarcode,  String? sku,  String? storeId,  dynamic barcodeType,  String? nameEn,  String? nameKh,  dynamic mobileNameEn,  dynamic mobileNameKh,  dynamic divisionCode,  String? departmentCode,  String? categoryCode,  String? subCategoryCode,  double? price,  ImageResponse? thumbnailImage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? barcode,  dynamic oldBarcode,  String? sku,  String? storeId,  dynamic barcodeType,  String? nameEn,  String? nameKh,  dynamic mobileNameEn,  dynamic mobileNameKh,  dynamic divisionCode,  String? departmentCode,  String? categoryCode,  String? subCategoryCode,  double? price,  int? discountTypeId,  double? discountValue,  double? offerPrice,  bool? isPLU,  ImageResponse? thumbnailImage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Proudct() when $default != null:
-return $default(_that.barcode,_that.oldBarcode,_that.sku,_that.storeId,_that.barcodeType,_that.nameEn,_that.nameKh,_that.mobileNameEn,_that.mobileNameKh,_that.divisionCode,_that.departmentCode,_that.categoryCode,_that.subCategoryCode,_that.price,_that.thumbnailImage);case _:
+return $default(_that.barcode,_that.oldBarcode,_that.sku,_that.storeId,_that.barcodeType,_that.nameEn,_that.nameKh,_that.mobileNameEn,_that.mobileNameKh,_that.divisionCode,_that.departmentCode,_that.categoryCode,_that.subCategoryCode,_that.price,_that.discountTypeId,_that.discountValue,_that.offerPrice,_that.isPLU,_that.thumbnailImage);case _:
   return orElse();
 
 }
@@ -193,10 +197,10 @@ return $default(_that.barcode,_that.oldBarcode,_that.sku,_that.storeId,_that.bar
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? barcode,  dynamic oldBarcode,  String? sku,  String? storeId,  dynamic barcodeType,  String? nameEn,  String? nameKh,  dynamic mobileNameEn,  dynamic mobileNameKh,  dynamic divisionCode,  String? departmentCode,  String? categoryCode,  String? subCategoryCode,  double? price,  ImageResponse? thumbnailImage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? barcode,  dynamic oldBarcode,  String? sku,  String? storeId,  dynamic barcodeType,  String? nameEn,  String? nameKh,  dynamic mobileNameEn,  dynamic mobileNameKh,  dynamic divisionCode,  String? departmentCode,  String? categoryCode,  String? subCategoryCode,  double? price,  int? discountTypeId,  double? discountValue,  double? offerPrice,  bool? isPLU,  ImageResponse? thumbnailImage)  $default,) {final _that = this;
 switch (_that) {
 case _Proudct():
-return $default(_that.barcode,_that.oldBarcode,_that.sku,_that.storeId,_that.barcodeType,_that.nameEn,_that.nameKh,_that.mobileNameEn,_that.mobileNameKh,_that.divisionCode,_that.departmentCode,_that.categoryCode,_that.subCategoryCode,_that.price,_that.thumbnailImage);case _:
+return $default(_that.barcode,_that.oldBarcode,_that.sku,_that.storeId,_that.barcodeType,_that.nameEn,_that.nameKh,_that.mobileNameEn,_that.mobileNameKh,_that.divisionCode,_that.departmentCode,_that.categoryCode,_that.subCategoryCode,_that.price,_that.discountTypeId,_that.discountValue,_that.offerPrice,_that.isPLU,_that.thumbnailImage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -213,10 +217,10 @@ return $default(_that.barcode,_that.oldBarcode,_that.sku,_that.storeId,_that.bar
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? barcode,  dynamic oldBarcode,  String? sku,  String? storeId,  dynamic barcodeType,  String? nameEn,  String? nameKh,  dynamic mobileNameEn,  dynamic mobileNameKh,  dynamic divisionCode,  String? departmentCode,  String? categoryCode,  String? subCategoryCode,  double? price,  ImageResponse? thumbnailImage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? barcode,  dynamic oldBarcode,  String? sku,  String? storeId,  dynamic barcodeType,  String? nameEn,  String? nameKh,  dynamic mobileNameEn,  dynamic mobileNameKh,  dynamic divisionCode,  String? departmentCode,  String? categoryCode,  String? subCategoryCode,  double? price,  int? discountTypeId,  double? discountValue,  double? offerPrice,  bool? isPLU,  ImageResponse? thumbnailImage)?  $default,) {final _that = this;
 switch (_that) {
 case _Proudct() when $default != null:
-return $default(_that.barcode,_that.oldBarcode,_that.sku,_that.storeId,_that.barcodeType,_that.nameEn,_that.nameKh,_that.mobileNameEn,_that.mobileNameKh,_that.divisionCode,_that.departmentCode,_that.categoryCode,_that.subCategoryCode,_that.price,_that.thumbnailImage);case _:
+return $default(_that.barcode,_that.oldBarcode,_that.sku,_that.storeId,_that.barcodeType,_that.nameEn,_that.nameKh,_that.mobileNameEn,_that.mobileNameKh,_that.divisionCode,_that.departmentCode,_that.categoryCode,_that.subCategoryCode,_that.price,_that.discountTypeId,_that.discountValue,_that.offerPrice,_that.isPLU,_that.thumbnailImage);case _:
   return null;
 
 }
@@ -228,7 +232,7 @@ return $default(_that.barcode,_that.oldBarcode,_that.sku,_that.storeId,_that.bar
 
 @JsonSerializable(fieldRename: FieldRename.none)
 class _Proudct implements Proudct {
-   _Proudct({this.barcode, this.oldBarcode, this.sku, this.storeId, this.barcodeType, this.nameEn, this.nameKh, this.mobileNameEn, this.mobileNameKh, this.divisionCode, this.departmentCode, this.categoryCode, this.subCategoryCode, this.price, this.thumbnailImage});
+   _Proudct({this.barcode, this.oldBarcode, this.sku, this.storeId, this.barcodeType, this.nameEn, this.nameKh, this.mobileNameEn, this.mobileNameKh, this.divisionCode, this.departmentCode, this.categoryCode, this.subCategoryCode, this.price, this.discountTypeId, this.discountValue, this.offerPrice, this.isPLU, this.thumbnailImage});
   factory _Proudct.fromJson(Map<String, dynamic> json) => _$ProudctFromJson(json);
 
 @override  String? barcode;
@@ -245,6 +249,10 @@ class _Proudct implements Proudct {
 @override  String? categoryCode;
 @override  String? subCategoryCode;
 @override  double? price;
+@override  int? discountTypeId;
+@override  double? discountValue;
+@override  double? offerPrice;
+@override  bool? isPLU;
 @override  ImageResponse? thumbnailImage;
 
 /// Create a copy of Proudct
@@ -262,7 +270,7 @@ Map<String, dynamic> toJson() {
 
 @override
 String toString() {
-  return 'Proudct(barcode: $barcode, oldBarcode: $oldBarcode, sku: $sku, storeId: $storeId, barcodeType: $barcodeType, nameEn: $nameEn, nameKh: $nameKh, mobileNameEn: $mobileNameEn, mobileNameKh: $mobileNameKh, divisionCode: $divisionCode, departmentCode: $departmentCode, categoryCode: $categoryCode, subCategoryCode: $subCategoryCode, price: $price, thumbnailImage: $thumbnailImage)';
+  return 'Proudct(barcode: $barcode, oldBarcode: $oldBarcode, sku: $sku, storeId: $storeId, barcodeType: $barcodeType, nameEn: $nameEn, nameKh: $nameKh, mobileNameEn: $mobileNameEn, mobileNameKh: $mobileNameKh, divisionCode: $divisionCode, departmentCode: $departmentCode, categoryCode: $categoryCode, subCategoryCode: $subCategoryCode, price: $price, discountTypeId: $discountTypeId, discountValue: $discountValue, offerPrice: $offerPrice, isPLU: $isPLU, thumbnailImage: $thumbnailImage)';
 }
 
 
@@ -273,7 +281,7 @@ abstract mixin class _$ProudctCopyWith<$Res> implements $ProudctCopyWith<$Res> {
   factory _$ProudctCopyWith(_Proudct value, $Res Function(_Proudct) _then) = __$ProudctCopyWithImpl;
 @override @useResult
 $Res call({
- String? barcode, dynamic oldBarcode, String? sku, String? storeId, dynamic barcodeType, String? nameEn, String? nameKh, dynamic mobileNameEn, dynamic mobileNameKh, dynamic divisionCode, String? departmentCode, String? categoryCode, String? subCategoryCode, double? price, ImageResponse? thumbnailImage
+ String? barcode, dynamic oldBarcode, String? sku, String? storeId, dynamic barcodeType, String? nameEn, String? nameKh, dynamic mobileNameEn, dynamic mobileNameKh, dynamic divisionCode, String? departmentCode, String? categoryCode, String? subCategoryCode, double? price, int? discountTypeId, double? discountValue, double? offerPrice, bool? isPLU, ImageResponse? thumbnailImage
 });
 
 
@@ -290,7 +298,7 @@ class __$ProudctCopyWithImpl<$Res>
 
 /// Create a copy of Proudct
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? barcode = freezed,Object? oldBarcode = freezed,Object? sku = freezed,Object? storeId = freezed,Object? barcodeType = freezed,Object? nameEn = freezed,Object? nameKh = freezed,Object? mobileNameEn = freezed,Object? mobileNameKh = freezed,Object? divisionCode = freezed,Object? departmentCode = freezed,Object? categoryCode = freezed,Object? subCategoryCode = freezed,Object? price = freezed,Object? thumbnailImage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? barcode = freezed,Object? oldBarcode = freezed,Object? sku = freezed,Object? storeId = freezed,Object? barcodeType = freezed,Object? nameEn = freezed,Object? nameKh = freezed,Object? mobileNameEn = freezed,Object? mobileNameKh = freezed,Object? divisionCode = freezed,Object? departmentCode = freezed,Object? categoryCode = freezed,Object? subCategoryCode = freezed,Object? price = freezed,Object? discountTypeId = freezed,Object? discountValue = freezed,Object? offerPrice = freezed,Object? isPLU = freezed,Object? thumbnailImage = freezed,}) {
   return _then(_Proudct(
 barcode: freezed == barcode ? _self.barcode : barcode // ignore: cast_nullable_to_non_nullable
 as String?,oldBarcode: freezed == oldBarcode ? _self.oldBarcode : oldBarcode // ignore: cast_nullable_to_non_nullable
@@ -306,7 +314,11 @@ as dynamic,departmentCode: freezed == departmentCode ? _self.departmentCode : de
 as String?,categoryCode: freezed == categoryCode ? _self.categoryCode : categoryCode // ignore: cast_nullable_to_non_nullable
 as String?,subCategoryCode: freezed == subCategoryCode ? _self.subCategoryCode : subCategoryCode // ignore: cast_nullable_to_non_nullable
 as String?,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as double?,thumbnailImage: freezed == thumbnailImage ? _self.thumbnailImage : thumbnailImage // ignore: cast_nullable_to_non_nullable
+as double?,discountTypeId: freezed == discountTypeId ? _self.discountTypeId : discountTypeId // ignore: cast_nullable_to_non_nullable
+as int?,discountValue: freezed == discountValue ? _self.discountValue : discountValue // ignore: cast_nullable_to_non_nullable
+as double?,offerPrice: freezed == offerPrice ? _self.offerPrice : offerPrice // ignore: cast_nullable_to_non_nullable
+as double?,isPLU: freezed == isPLU ? _self.isPLU : isPLU // ignore: cast_nullable_to_non_nullable
+as bool?,thumbnailImage: freezed == thumbnailImage ? _self.thumbnailImage : thumbnailImage // ignore: cast_nullable_to_non_nullable
 as ImageResponse?,
   ));
 }
