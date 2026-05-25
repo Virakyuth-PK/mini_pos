@@ -8,6 +8,7 @@ import 'package:mini_pos/src/model/proudct/image_response.dart';
 
 import '../../../route/app_route.dart';
 import '../../../src/model/proudct/proudct.dart';
+import '../../../src/module/product_detail/logic.dart';
 
 class BarcodeScannerService extends GetxService {
   final StringBuffer _buffer = StringBuffer();
@@ -115,7 +116,7 @@ class BarcodeScannerService extends GetxService {
       );
 
       showLog('✅ ${product.name} found', background: Colors.green);
-
+      Get.delete<ProductDetailLogic>();
       Get.toNamed(
         AppRoute.productDetail,
         arguments: result,

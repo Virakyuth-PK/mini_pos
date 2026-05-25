@@ -12,6 +12,7 @@ class ProductDetailLogic extends GetxController {
 
     if (arg != null) {
       state.productDetail = arg;
+      update();
     }
     super.onInit();
   }

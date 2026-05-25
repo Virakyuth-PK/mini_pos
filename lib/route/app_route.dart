@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:mini_pos/src/module/product_detail/binding.dart';
 import 'package:mini_pos/src/module/product_detail/logic.dart';
 import 'package:mini_pos/src/module/product_detail/view.dart';
@@ -34,7 +35,9 @@ class AppRoute {
     customGetPage(
       name: productDetail,
       page: () => ProductDetailPage(),
-      binding: ProductDetailBinding(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => ProductDetailLogic());
+      }),
     ),
   ];
 }

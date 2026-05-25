@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:mini_pos/core/global_widgets/x_button.dart';
 import 'package:mini_pos/core/global_widgets/x_network_image.dart';
 import 'package:mini_pos/core/utils/app_color.dart';
-
 import 'package:mini_pos/src/module/product_detail/state.dart';
 import '../../../core/app/service/barcode_scanner_service.dart';
 import '../../../core/utils/app_ext.dart';
@@ -11,7 +10,7 @@ import 'logic.dart';
 
 class ProductDetailPage extends StatelessWidget {
   ProductDetailPage({super.key});
-  final logic = Get.put(ProductDetailLogic());
+
   final ProductDetailState state = Get.find<ProductDetailLogic>().state;
 
   @override
@@ -103,7 +102,7 @@ class CustomProductDetailView extends StatelessWidget {
               XButton(
                 onPress: () async {
                   await Get.find<BarcodeScannerService>().searchProduct(
-                    '0008600423830',
+                    '011210006508',
                   );
                 },
                 child: ProductInfoSection(
