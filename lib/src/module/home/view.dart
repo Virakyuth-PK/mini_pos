@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:mini_pos/core/app/service/barcode_scanner_service.dart';
 import 'package:mini_pos/core/global_widgets/design_by.dart';
 import 'package:mini_pos/core/utils/app_color.dart';
 import 'package:mini_pos/core/utils/app_style.dart';
@@ -75,55 +76,7 @@ class HomePage extends StatelessWidget {
             bottom: 0,
             left: 0,
             right: 0,
-            child: Container(
-              height: 40.d,
-              decoration: xBoxDecoration(
-                color: AppColor.scaffoldBackgroundColor,
-                borderRadius: BorderRadius.zero,
-              ),
-              child: Padding(
-                padding: .symmetric(vertical: 5.d),
-                child: Row(
-                  mainAxisAlignment: .center,
-                  spacing: 10.d,
-                  children: [
-                    SvgPicture.asset(Assets.svg.cmtrLogo, fit: .fitHeight),
-                    VerticalDivider(),
-                    SvgPicture.asset(Assets.svg.cmgsvg, fit: .fitHeight),
-                    Column(
-                      crossAxisAlignment: .start,
-                      children: [
-                        Text(
-                          "Develop By",
-                          style: XTextStyle.bold(fontSize: 8.d),
-                        ),
-                        Row(
-                          spacing: 5.d,
-                          crossAxisAlignment: .start,
-                          children: [
-                            Text(
-                              "CHIP MONG",
-                              style: XTextStyle.bold(
-                                fontSize: 8.d,
-                                fontWeight: .w900,
-                              ),
-                            ),
-                            Text(
-                              "GROUP",
-                              style: XTextStyle.bold(
-                                fontSize: 8.d,
-                                fontWeight: .w900,
-                                color: CompanyColor.CHIPMONG_GROUP,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            child: _bottomNavigationBar(),
           ),
         ],
       ),
@@ -204,7 +157,7 @@ class HomePage extends StatelessWidget {
           bottom: 10..d,
           left: 15.0.d,
         ),
-        separatorBuilder: (context, index) => xSpaceH(size: 20.d),
+        separatorBuilder: (context, index) => xSpaceH(size: 15.d),
         pagingController: state.categoryPagingController.value,
         scrollDirection: Axis.horizontal,
         builderDelegate: XPagedChildBuilderDelegate.list(
@@ -291,67 +244,69 @@ class HomePage extends StatelessWidget {
     if (state.imageUrlList.isEmpty) {
       return SizedBox.shrink();
     }
-    return Stack(
-      children: [
-        SizedBox(
-          height: double.infinity,
-          width: Get.width,
-          child: CarouselSlider.builder(
-            itemCount: state.imageUrlList.length,
-            itemBuilder:
-                (BuildContext context, int itemIndex, int pageViewIndex) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: XNetworkImage(
-                      height: double.infinity,
-                      src: state.imageUrlList[itemIndex] ?? "",
-                      fit: .fitHeight,
-                    ),
-                  );
-                },
-            options: CarouselOptions(
-              onPageChanged: (index, reason) {
-                state.currentIndexSlide.value = index;
-                logic.update();
-              },
-              height: double.infinity,
-              aspectRatio: 0.2,
-              viewportFraction: 0.9,
-              initialPage: 0,
-              enlargeFactor: 0.2,
-              autoPlay: true,
-              enlargeCenterPage: true,
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: 15.d,
-          right: 40.d,
-          child: Container(
-            padding: EdgeInsetsGeometry.symmetric(
-              horizontal: 10.d,
-              vertical: 5.d,
-            ),
-            decoration: xBoxDecoration(
-              color: AppColor.primaryColor.withOpacity(0.6),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              "${state.currentIndexSlide.value + 1} / ${state.imageUrlList.length}",
-              style: XTextStyle.regular(
-                color: AppColor.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 12.d,
+    return SizedBox(
+      height: double.infinity,
+      width: Get.width,
+      child: CarouselSlider.builder(
+        itemCount: state.imageUrlList.length,
+        itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+          return Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: XNetworkImage(
+                  height: double.infinity,
+                  src: state.imageUrlList[itemIndex] ?? "",
+                  fit: .fitHeight,
+                ),
               ),
-            ),
-          ),
+              Positioned(
+                bottom: 10.d,
+                right: 10.d,
+                child: Container(
+                  padding: EdgeInsetsGeometry.symmetric(
+                    horizontal: 10.d,
+                    vertical: 5.d,
+                  ),
+                  decoration: xBoxDecoration(
+                    color: AppColor.primaryColor.withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    "${state.currentIndexSlide.value + 1} / ${state.imageUrlList.length}",
+                    style: XTextStyle.regular(
+                      color: AppColor.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12.d,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+        options: CarouselOptions(
+          onPageChanged: (index, reason) {
+            state.currentIndexSlide.value = index;
+            logic.update();
+          },
+          height: double.infinity,
+          aspectRatio: 0.2,
+          viewportFraction: 0.9,
+          initialPage: 0,
+          enlargeFactor: 0.2,
+          autoPlay: true,
+          enlargeCenterPage: true,
         ),
-      ],
+      ),
     );
   }
 
   FloatingActionButton _floatActionButton() => FloatingActionButton(
-    onPressed: () => Get.toNamed(AppRoute.search),
+    onPressed: () {
+      Get.toNamed(AppRoute.search);
+      // Get.find<BarcodeScannerService>().searchProduct('010700519528');
+    },
     backgroundColor: AppColor.primaryColor,
     shape: const CircleBorder(),
     child: Padding(
@@ -361,8 +316,12 @@ class HomePage extends StatelessWidget {
   );
 
   Widget _bottomNavigationBar() {
-    return BottomAppBar(
-      height: 60.d,
+    return Container(
+      height: 40.d,
+      decoration: xBoxDecoration(
+        color: AppColor.white,
+        borderRadius: BorderRadius.zero,
+      ),
       child: Padding(
         padding: .symmetric(vertical: 5.d),
         child: Row(

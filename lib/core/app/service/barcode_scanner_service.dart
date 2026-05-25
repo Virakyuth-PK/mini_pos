@@ -2,6 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:mini_pos/src/data/repo/product_repo.dart';
+import 'package:mini_pos/src/model/proudct/image_response.dart';
+
+import '../../../route/app_route.dart';
+import '../../../src/model/proudct/proudct.dart';
 
 class BarcodeScannerService extends GetxService {
   final StringBuffer _buffer = StringBuffer();
@@ -37,18 +42,15 @@ class BarcodeScannerService extends GetxService {
       /// auto trigger if scanner no enter key
       _timer?.cancel();
 
-      _timer = Timer(
-        const Duration(milliseconds: 500),
-            () {
-          final barcode = _buffer.toString().trim();
+      _timer = Timer(const Duration(milliseconds: 500), () {
+        final barcode = _buffer.toString().trim();
 
-          _clear();
+        _clear();
 
-          if (barcode.length >= 4) {
-            searchProduct(barcode);
-          }
-        },
-      );
+        if (barcode.length >= 4) {
+          searchProduct(barcode);
+        }
+      });
     }
   }
 
@@ -60,10 +62,7 @@ class BarcodeScannerService extends GetxService {
   /// =========================
   /// DEBUG TOAST
   /// =========================
-  void showLog(
-      String message, {
-        Color background = Colors.black87,
-      }) {
+  void showLog(String message, {Color background = Colors.black87}) {
     if (Get.isSnackbarOpen) {
       Get.closeCurrentSnackbar();
     }
@@ -71,10 +70,7 @@ class BarcodeScannerService extends GetxService {
     Get.rawSnackbar(
       messageText: Text(
         message,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 14,
-        ),
+        style: const TextStyle(color: Colors.white, fontSize: 14),
       ),
       snackPosition: SnackPosition.TOP,
       backgroundColor: background,
@@ -89,29 +85,27 @@ class BarcodeScannerService extends GetxService {
   /// =========================
   Future<void> searchProduct(String barcode) async {
     if (isSearching.value) return;
+    final productRepo = Get.find<ProductRepo>();
 
     try {
       isSearching.value = true;
-
-      showLog(
-        '🔍 Scanning : $barcode',
-        background: Colors.blue,
-      );
+      showLog('🔍 Scanning : $barcode', background: Colors.blue);
 
       /// simulate api loading
-      await Future.delayed(
-        const Duration(seconds: 1),
-      );
+      await Future.delayed(const Duration(seconds: 1));
 
       /// simulate not found
       if (barcode == '0000') {
-        showLog(
-          '❌ Product not found',
-          background: Colors.red,
-        );
+        showLog('❌ Product not found', background: Colors.red);
 
         return;
       }
+
+      var result = await productRepo.getProductByBarcode(barcode);
+      if (result == null) {
+        showLog('❌ Product not found', background: Colors.red);
+        return;
+      } else {}
 
       /// simulate found product
       final product = ProductModel(
@@ -119,33 +113,42 @@ class BarcodeScannerService extends GetxService {
         name: 'Coca Cola',
         price: '1.50',
         imageUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/1/14/Coca-Cola_can.jpg',
+            'https://upload.wikimedia.org/wikipedia/commons/1/14/Coca-Cola_can.jpg',
       );
 
-      showLog(
-        '✅ ${product.name} found',
-        background: Colors.green,
+      final pr = Proudct(
+        barcode: '010700519528',
+        price: 2.3400,
+        nameEn: "YEO'S MIX FLAVOR 300MLX24'S (CASE)",
+        nameKh: 'ទឹកផ្លែឈើចំរុះ',
+        thumbnailImage: ImageResponse(
+          filePath:
+              'https://upload.wikimedia.org/wikipedia/commons/1/14/Coca-Cola_can.jpg',
+          thumbnailFilePath:
+              'https://upload.wikimedia.org/wikipedia/commons/1/14/Coca-Cola_can.jpg',
+        ),
       );
+
+      showLog('✅ ${product.name} found', background: Colors.green);
 
       /// close old bottom sheet
       if (Get.isBottomSheetOpen ?? false) {
         Get.back();
       }
 
-      Get.bottomSheet(
-        ProductBottomSheet(
-          product: product,
-        ),
-        isScrollControlled: true,
-        backgroundColor: Colors.transparent,
-        enterBottomSheetDuration:
-        const Duration(milliseconds: 200),
-      );
+      Get.toNamed(AppRoute.productDetail, arguments: result);
+
+      // Get.bottomSheet(
+      //   ProductBottomSheet(
+      //     product: product,
+      //   ),
+      //   isScrollControlled: true,
+      //   backgroundColor: Colors.transparent,
+      //   enterBottomSheetDuration:
+      //   const Duration(milliseconds: 200),
+      // );
     } catch (e) {
-      showLog(
-        '🔥 Error : $e',
-        background: Colors.orange,
-      );
+      showLog('🔥 Error : $e', background: Colors.orange);
     } finally {
       isSearching.value = false;
     }
@@ -168,9 +171,7 @@ class ProductModel {
     required this.imageUrl,
   });
 
-  factory ProductModel.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
       barcode: json['barcode']?.toString() ?? '',
       name: json['name']?.toString() ?? '',
@@ -186,32 +187,24 @@ class ProductModel {
 class GlobalBarcodeListener extends StatefulWidget {
   final Widget child;
 
-  const GlobalBarcodeListener({
-    super.key,
-    required this.child,
-  });
+  const GlobalBarcodeListener({super.key, required this.child});
 
   @override
-  State<GlobalBarcodeListener> createState() =>
-      _GlobalBarcodeListenerState();
+  State<GlobalBarcodeListener> createState() => _GlobalBarcodeListenerState();
 }
 
-class _GlobalBarcodeListenerState
-    extends State<GlobalBarcodeListener> {
+class _GlobalBarcodeListenerState extends State<GlobalBarcodeListener> {
   final FocusNode _focusNode = FocusNode();
 
-  final BarcodeScannerService scannerService =
-  Get.find();
+  final BarcodeScannerService scannerService = Get.find();
 
   @override
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback(
-          (_) {
-        _focusNode.requestFocus();
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
   }
 
   @override
@@ -246,10 +239,7 @@ class _GlobalBarcodeListenerState
 class ProductBottomSheet extends StatelessWidget {
   final ProductModel product;
 
-  const ProductBottomSheet({
-    super.key,
-    required this.product,
-  });
+  const ProductBottomSheet({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -258,9 +248,7 @@ class ProductBottomSheet extends StatelessWidget {
       width: double.infinity,
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -281,18 +269,13 @@ class ProductBottomSheet extends StatelessWidget {
           /// NAME
           Text(
             product.name,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
 
           const SizedBox(height: 8),
 
           /// BARCODE
-          Text(
-            'Barcode : ${product.barcode}',
-          ),
+          Text('Barcode : ${product.barcode}'),
 
           const SizedBox(height: 8),
 
@@ -315,9 +298,7 @@ class ProductBottomSheet extends StatelessWidget {
               onPressed: () {
                 Get.back();
               },
-              child: const Text(
-                'Close',
-              ),
+              child: const Text('Close'),
             ),
           ),
         ],

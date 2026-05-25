@@ -18,6 +18,8 @@ abstract class IProductRepo {
     int? pageSize,
     String? storeId,
   });
+
+  Future<Proudct?> getProductByBarcode(String barcode);
 }
 
 class ProductRepo implements IProductRepo {
@@ -73,6 +75,25 @@ class ProductRepo implements IProductRepo {
       endPoint: ApiEndpoint.product(ProductEndpoint.Get_All_Category),
     );
 
+    return result;
+  }
+
+  @override
+  Future<Proudct?> getProductByBarcode(String barcode) async {
+    ApiHandler<Proudct> handler = ApiHandler<Proudct>.get(
+      converter: (json) => Proudct.fromJson(json),
+    );
+
+    var result = await handler.execute(
+      onComplete: (data) => data,
+      customApikeyTag: "A-API-KEY",
+      customApikey: "CMRT-Super-Customer-Key:171f12d96dda63eae8a04c6c08602f05",
+      endPoint: ApiEndpoint.product(
+        ProductEndpoint.Get_By_Id,
+        storeId: '10017',
+        barcode: barcode.toString(),
+      ),
+    );
     return result;
   }
 }
