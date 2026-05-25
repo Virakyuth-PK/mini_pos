@@ -3,35 +3,24 @@ import 'package:get/get.dart';
 import 'package:mini_pos/core/global_widgets/x_button.dart';
 import 'package:mini_pos/core/global_widgets/x_network_image.dart';
 import 'package:mini_pos/core/utils/app_color.dart';
-import 'package:mini_pos/route/app_route.dart';
+
 import 'package:mini_pos/src/module/product_detail/state.dart';
 import '../../../core/app/service/barcode_scanner_service.dart';
 import '../../../core/utils/app_ext.dart';
 import 'logic.dart';
 
-class ProductDetailPage extends StatefulWidget {
-  const ProductDetailPage({super.key});
-
-  @override
-  State<ProductDetailPage> createState() => _ProductDetailPageState();
-}
-
-class _ProductDetailPageState extends State<ProductDetailPage> {
-  // final ProductDetailLogic logic = Get.find<ProductDetailLogic>();
-  //
-  final ProductDetailLogic logic = Get.put(ProductDetailLogic(), tag: '1');
-
+class ProductDetailPage extends StatelessWidget {
+  ProductDetailPage({super.key});
+  final logic = Get.put(ProductDetailLogic());
   final ProductDetailState state = Get.find<ProductDetailLogic>().state;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: _floatActionButton(),
       body: GetBuilder<ProductDetailLogic>(
-        tag: "1",
         builder: (logic) {
           return CustomProductDetailView(
             imageUrl:
@@ -64,22 +53,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       ),
     ),
   );
-
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.transparent,
-      automaticallyImplyLeading: false,
-      automaticallyImplyActions: false,
-      elevation: 0,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new),
-        onPressed: () => Get.back(),
-      ),
-      actions: [
-        IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
-      ],
-    );
-  }
 }
 
 class CustomProductDetailView extends StatelessWidget {
@@ -122,10 +95,6 @@ class CustomProductDetailView extends StatelessWidget {
               );
             },
           ),
-          // leading: IconButton(
-          //   icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
-          //   onPressed: () => Get.back(),
-          // ),
         ),
         SliverToBoxAdapter(
           child: Column(
@@ -135,11 +104,6 @@ class CustomProductDetailView extends StatelessWidget {
                 onPress: () async {
                   await Get.find<BarcodeScannerService>().searchProduct(
                     '0008600423830',
-                  );
-                  Get.toNamed(
-                    AppRoute.productDetail,
-                    arguments:
-                        Get.find<ProductDetailLogic>().state.productDetail,
                   );
                 },
                 child: ProductInfoSection(

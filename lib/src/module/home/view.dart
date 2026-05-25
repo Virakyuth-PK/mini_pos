@@ -1,27 +1,21 @@
-import 'dart:math';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mini_pos/core/app/service/barcode_scanner_service.dart';
-import 'package:mini_pos/core/global_widgets/design_by.dart';
 import 'package:mini_pos/core/utils/app_color.dart';
 import 'package:mini_pos/core/utils/app_style.dart';
 import 'package:mini_pos/core/utils/text_size.dart';
 import 'package:mini_pos/route/app_route.dart';
 import 'package:mini_pos/src/module/widget/product_item.dart';
-
 import '../../../core/global_widgets/x_button.dart';
 import '../../../core/global_widgets/x_network_image.dart';
-import '../../../core/global_widgets/x_showmodal_bottom.dart';
 import '../../../core/utils/app_ext.dart';
 import '../../../core/utils/empty_data.dart';
 import '../../../core/utils/loading_shimmer.dart';
 import '../../../core/utils/x_paged_child_builder_delegate.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../translation/app_locale.dart';
 import '../../model/category_response/category_response.dart';
 import '../../model/proudct/proudct.dart';
 import 'logic.dart';
@@ -38,7 +32,6 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColor.white,
       floatingActionButton: _floatActionButton(),
-      // bottomNavigationBar: _bottomNavigationBar(),
       body: Stack(
         children: [
           Container(
@@ -304,8 +297,8 @@ class HomePage extends StatelessWidget {
 
   FloatingActionButton _floatActionButton() => FloatingActionButton(
     onPressed: () {
-      // Get.toNamed(AppRoute.search);
-      Get.find<BarcodeScannerService>().searchProduct('010700519528');
+      Get.toNamed(AppRoute.search);
+      // Get.find<BarcodeScannerService>().searchProduct('010700519528');
     },
     backgroundColor: AppColor.primaryColor,
     shape: const CircleBorder(),

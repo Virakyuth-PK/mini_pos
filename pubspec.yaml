@@ -10,6 +10,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # AI AGENT
+#  google_gen_ai: ^0.2.0
+
   # Data Handling
   infinite_scroll_pagination: ^4.1.0
   dropdown_button2: ^2.3.9

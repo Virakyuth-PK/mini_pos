@@ -1,4 +1,5 @@
 import 'package:mini_pos/src/module/product_detail/binding.dart';
+import 'package:mini_pos/src/module/product_detail/logic.dart';
 import 'package:mini_pos/src/module/product_detail/view.dart';
 import 'package:mini_pos/src/module/search/binding.dart';
 import 'package:mini_pos/src/module/search/view.dart';

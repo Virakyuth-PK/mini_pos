@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../../../core/services/gemini_service.dart';
 import 'state.dart';
 
 class ProductDetailLogic extends GetxController {
@@ -13,5 +14,14 @@ class ProductDetailLogic extends GetxController {
       state.productDetail = arg;
     }
     super.onInit();
+  }
+
+  @override
+  void onReady() async {
+    super.onReady();
+    // await ProductDetailAiClient().askAiAboutProduct(
+    //   rawProductJson: state.productDetail!.toJson(),
+    //   userQuestion: "How to use this product?",
+    // );
   }
 }

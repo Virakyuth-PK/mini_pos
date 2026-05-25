@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:mini_pos/core/utils/app_ext.dart';
 import 'package:mini_pos/src/data/repo/product_repo.dart';
 import 'package:mini_pos/src/model/proudct/image_response.dart';
 
@@ -10,7 +11,6 @@ import '../../../src/model/proudct/proudct.dart';
 
 class BarcodeScannerService extends GetxService {
   final StringBuffer _buffer = StringBuffer();
-
   Timer? _timer;
 
   final RxBool isSearching = false.obs;
@@ -97,7 +97,6 @@ class BarcodeScannerService extends GetxService {
       /// simulate not found
       if (barcode == '0000') {
         showLog('❌ Product not found', background: Colors.red);
-
         return;
       }
 
@@ -110,43 +109,18 @@ class BarcodeScannerService extends GetxService {
       /// simulate found product
       final product = ProductModel(
         barcode: barcode,
-        name: 'Coca Cola',
-        price: '1.50',
-        imageUrl:
-            'https://upload.wikimedia.org/wikipedia/commons/1/14/Coca-Cola_can.jpg',
-      );
-
-      final pr = Proudct(
-        barcode: '010700519528',
-        price: 2.3400,
-        nameEn: "YEO'S MIX FLAVOR 300MLX24'S (CASE)",
-        nameKh: 'ទឹកផ្លែឈើចំរុះ',
-        thumbnailImage: ImageResponse(
-          filePath:
-              'https://upload.wikimedia.org/wikipedia/commons/1/14/Coca-Cola_can.jpg',
-          thumbnailFilePath:
-              'https://upload.wikimedia.org/wikipedia/commons/1/14/Coca-Cola_can.jpg',
-        ),
+        name: result.nameKh ?? result.nameEn ?? 'Unknown',
+        price: (result.price ?? 0.0).toString(),
+        imageUrl: ' ${result.thumbnailImage?.thumbnailFilePath}',
       );
 
       showLog('✅ ${product.name} found', background: Colors.green);
 
-      /// close old bottom sheet
-      if (Get.isBottomSheetOpen ?? false) {
-        Get.back();
-      }
-
-      Get.toNamed(AppRoute.productDetail, arguments: result);
-
-      // Get.bottomSheet(
-      //   ProductBottomSheet(
-      //     product: product,
-      //   ),
-      //   isScrollControlled: true,
-      //   backgroundColor: Colors.transparent,
-      //   enterBottomSheetDuration:
-      //   const Duration(milliseconds: 200),
-      // );
+      Get.toNamed(
+        AppRoute.productDetail,
+        arguments: result,
+        preventDuplicates: false,
+      );
     } catch (e) {
       showLog('🔥 Error : $e', background: Colors.orange);
     } finally {
