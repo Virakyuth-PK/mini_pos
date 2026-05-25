@@ -304,8 +304,8 @@ class HomePage extends StatelessWidget {
 
   FloatingActionButton _floatActionButton() => FloatingActionButton(
     onPressed: () {
-      Get.toNamed(AppRoute.search);
-      // Get.find<BarcodeScannerService>().searchProduct('010700519528');
+      // Get.toNamed(AppRoute.search);
+      Get.find<BarcodeScannerService>().searchProduct('010700519528');
     },
     backgroundColor: AppColor.primaryColor,
     shape: const CircleBorder(),

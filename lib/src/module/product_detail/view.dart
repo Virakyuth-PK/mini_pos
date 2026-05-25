@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mini_pos/core/global_widgets/x_button.dart';
 import 'package:mini_pos/core/global_widgets/x_network_image.dart';
 import 'package:mini_pos/core/utils/app_color.dart';
+import 'package:mini_pos/route/app_route.dart';
 import 'package:mini_pos/src/module/product_detail/state.dart';
+import '../../../core/app/service/barcode_scanner_service.dart';
 import '../../../core/utils/app_ext.dart';
 import 'logic.dart';
 
@@ -14,7 +17,10 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
-  final ProductDetailLogic logic = Get.find<ProductDetailLogic>();
+  // final ProductDetailLogic logic = Get.find<ProductDetailLogic>();
+  //
+  final ProductDetailLogic logic = Get.put(ProductDetailLogic(), tag: '1');
+
   final ProductDetailState state = Get.find<ProductDetailLogic>().state;
 
   @override
@@ -25,6 +31,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: _floatActionButton(),
       body: GetBuilder<ProductDetailLogic>(
+        tag: "1",
         builder: (logic) {
           return CustomProductDetailView(
             imageUrl:
@@ -124,12 +131,24 @@ class CustomProductDetailView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ProductInfoSection(
-                productNameKh: productNameKh,
-                productName: productName,
-                price: price,
+              XButton(
+                onPress: () async {
+                  await Get.find<BarcodeScannerService>().searchProduct(
+                    '0008600423830',
+                  );
+                  Get.toNamed(
+                    AppRoute.productDetail,
+                    arguments:
+                        Get.find<ProductDetailLogic>().state.productDetail,
+                  );
+                },
+                child: ProductInfoSection(
+                  productNameKh: productNameKh,
+                  productName: productName,
+                  price: price,
 
-                stockStatus: "Available",
+                  stockStatus: "Available",
+                ),
               ),
             ],
           ),
