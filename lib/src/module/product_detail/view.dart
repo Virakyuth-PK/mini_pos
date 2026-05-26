@@ -1,3 +1,4 @@
+import 'package:firebase_ai/firebase_ai.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mini_pos/core/global_widgets/x_button.dart';
@@ -9,6 +10,7 @@ import 'package:screenshot/screenshot.dart';
 import '../../../core/app/service/barcode_scanner_service.dart';
 import '../../../core/utils/app_ext.dart';
 import 'logic.dart';
+import 'widget/product_ai_chat_section.dart';
 
 class ProductDetailPage extends StatelessWidget {
   ProductDetailPage({super.key});
@@ -22,8 +24,8 @@ class ProductDetailPage extends StatelessWidget {
       controller: logic.screenshotController,
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: _floatActionButton(),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // floatingActionButton: _floatActionButton(),
         body: GetBuilder<ProductDetailLogic>(
           builder: (logic) {
             return CustomProductDetailView(
@@ -70,7 +72,9 @@ class CustomProductDetailView extends StatelessWidget {
   final String productName;
   final double price;
 
-  const CustomProductDetailView({
+  final ProductDetailState state = Get.find<ProductDetailLogic>().state;
+
+  CustomProductDetailView({
     super.key,
     required this.imageUrl,
     required this.productNameKh,
@@ -81,6 +85,7 @@ class CustomProductDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
+      physics: NeverScrollableScrollPhysics(),
       slivers: [
         SliverAppBar(
           pinned: true,
@@ -109,18 +114,22 @@ class CustomProductDetailView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
               ProductInfoSection(
                 productNameKh: productNameKh,
                 productName: productName,
                 price: price,
                 stockStatus: "Available",
               ),
+
             ],
           ),
         ),
       ],
     );
   }
+
+
 }
 
 class ProductImageHeader extends StatelessWidget {
@@ -141,7 +150,7 @@ class ProductInfoSection extends StatelessWidget {
   final String? origin;
   final String? stockStatus;
 
-  const ProductInfoSection({
+   ProductInfoSection({
     super.key,
 
     required this.productNameKh,
@@ -150,6 +159,24 @@ class ProductInfoSection extends StatelessWidget {
     this.origin,
     this.stockStatus,
   });
+
+  final ProductDetailState state = Get.find<ProductDetailLogic>().state;
+
+  String buildProductInfo(Map<String, dynamic>? json) {
+    return json?.entries
+        .where((e) => e.value != null && e.value.toString().isNotEmpty)
+        .map((e) {
+      final key = e.key
+          .replaceAllMapped(
+        RegExp(r'([A-Z])'),
+            (match) => ' ${match.group(1)}',
+      )
+          .trim();
+
+      return '$key: ${e.value}';
+    })
+        .join('\n')??"";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -177,6 +204,11 @@ class ProductInfoSection extends StatelessWidget {
             const Divider(thickness: .3),
             const SizedBox(height: 12),
             _description(),
+
+            ProductAiChatSection(
+                productName: state.productDetail?.nameEn ?? '',
+                productInfo:buildProductInfo(state.productDetail?.toJson())
+            ),
           ],
         ),
       ),
@@ -285,11 +317,11 @@ class ProductInfoSection extends StatelessWidget {
 
   Widget _description() {
     return SizedBox(
-      height: 800,
       child: const Text(
         "Premium polyethylene cling wrap optimized for food safety packaging applications. Keeps meals fresh longer.",
         style: TextStyle(height: 1.4, color: Colors.black54),
       ),
     );
   }
+
 }

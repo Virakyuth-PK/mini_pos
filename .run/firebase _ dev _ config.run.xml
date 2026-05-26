@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="firebase | dev | config" type="ShConfigurationType">
-    <option name="SCRIPT_TEXT" value="flutterfire config --project=cmg-dms-393202 --out=lib/flutter_fire/firebase_options_dev.dart --ios-bundle-id=com.chipmong.dms-sale.dev --android-package-name=com.chipmong.dms_sale.dev" />
+    <option name="SCRIPT_TEXT" value="flutterfire config --project=cmrt-app-dev --out=lib/flutter_fire/firebase_options_dev.dart --android-package-name=com.chipmong.mini_pos.dev" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />

@@ -1,0 +1,105 @@
+{
+  "project_info": {
+    "project_number": "199110405793",
+    "project_id": "cmrt-app-dev",
+    "storage_bucket": "cmrt-app-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199110405793:android:87a43b5df7b1003b59cae0",
+        "android_client_info": {
+          "package_name": "com.chipmong.cmrtapp.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLX8OkHMKuU3hA_LWHM7xKQF-7A3dS2dI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199110405793:android:a20ca7e7f3d10c0159cae0",
+        "android_client_info": {
+          "package_name": "com.chipmong.cmscashierapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLX8OkHMKuU3hA_LWHM7xKQF-7A3dS2dI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199110405793:android:631b24ba6f8fb42359cae0",
+        "android_client_info": {
+          "package_name": "com.chipmong.cmscashierapp.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLX8OkHMKuU3hA_LWHM7xKQF-7A3dS2dI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199110405793:android:41c4a892eb77b69559cae0",
+        "android_client_info": {
+          "package_name": "com.chipmong.mini_pos.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLX8OkHMKuU3hA_LWHM7xKQF-7A3dS2dI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199110405793:android:68bf6322f19f5f3059cae0",
+        "android_client_info": {
+          "package_name": "com.chipmong.retail"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLX8OkHMKuU3hA_LWHM7xKQF-7A3dS2dI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

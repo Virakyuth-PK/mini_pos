@@ -10,6 +10,8 @@ import '../../../route/app_route.dart';
 import '../../../src/model/proudct/proudct.dart';
 import '../../../src/module/product_detail/logic.dart';
 
+import '../../../route/app_route.dart';
+
 class BarcodeScannerService extends GetxService {
   final StringBuffer _buffer = StringBuffer();
   Timer? _timer;
