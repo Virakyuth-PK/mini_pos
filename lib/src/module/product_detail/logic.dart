@@ -82,7 +82,7 @@ class ProductDetailLogic extends GetxController {
 
       if (image == null) return;
 
-      final resized = await resizeForPrinter(image, 384);
+      final resized = await resizeForPrinter(image,570);
 
       final shouldPrint = await Get.dialog<bool>(
         Dialog(
@@ -134,10 +134,10 @@ class ProductDetailLogic extends GetxController {
 
       if (shouldPrint != true) return;
 
-      await SunmiPrinter.bindingPrinter();
-      await SunmiPrinter.initPrinter();
+      // await SunmiPrinter.bindingPrinter();
+      // await SunmiPrinter.initPrinter();
 
-      await SunmiPrinter.printImage(resized);
+      await SunmiPrinter.printImage(resized,align: .CENTER);
 
       await SunmiPrinter.lineWrap(3);
       await SunmiPrinter.cutPaper();
