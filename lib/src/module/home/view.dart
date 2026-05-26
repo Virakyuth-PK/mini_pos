@@ -9,6 +9,7 @@ import 'package:mini_pos/core/utils/app_style.dart';
 import 'package:mini_pos/core/utils/text_size.dart';
 import 'package:mini_pos/route/app_route.dart';
 import 'package:mini_pos/src/module/widget/product_item.dart';
+import 'package:screenshot/screenshot.dart';
 import '../../../core/global_widgets/x_button.dart';
 import '../../../core/global_widgets/x_network_image.dart';
 import '../../../core/utils/app_ext.dart';
@@ -65,6 +66,7 @@ class HomePage extends StatelessWidget {
               },
             ),
           ),
+
           Positioned(
             bottom: 0,
             left: 0,

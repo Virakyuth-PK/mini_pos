@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:mini_pos/src/data/repo/product_repo.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
 import '../../../core/utils/x_paging_data_handler.dart';
 import '../../data/repo/promotion_repo.dart';
@@ -10,6 +13,7 @@ class HomeLogic extends GetxController {
   final HomeState state = HomeState();
   final ProductRepo _productRepo = Get.find<ProductRepo>();
   final PromotionRepo _promotionRepo = Get.find<PromotionRepo>();
+
 
   @override
   Future<void> onInit() async {
@@ -74,6 +78,7 @@ class HomeLogic extends GetxController {
       pageNo: pageNo,
     );
   }
+
 
   Future<void> getCategoryList({
     required int pageNo,

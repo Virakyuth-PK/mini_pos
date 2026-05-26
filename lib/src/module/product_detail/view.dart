@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:mini_pos/core/global_widgets/x_button.dart';
 import 'package:mini_pos/core/global_widgets/x_network_image.dart';
 import 'package:mini_pos/core/utils/app_color.dart';
+import 'package:mini_pos/core/utils/app_style.dart';
 import 'package:mini_pos/src/module/product_detail/state.dart';
+import 'package:screenshot/screenshot.dart';
 import '../../../core/app/service/barcode_scanner_service.dart';
 import '../../../core/utils/app_ext.dart';
 import 'logic.dart';
@@ -11,25 +13,33 @@ import 'logic.dart';
 class ProductDetailPage extends StatelessWidget {
   ProductDetailPage({super.key});
 
+  final ProductDetailLogic logic = Get.put(ProductDetailLogic());
   final ProductDetailState state = Get.find<ProductDetailLogic>().state;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _floatActionButton(),
-      body: GetBuilder<ProductDetailLogic>(
-        builder: (logic) {
-          return CustomProductDetailView(
-            imageUrl:
-                logic.state.productDetail?.thumbnailImage?.thumbnailFilePath ??
-                "",
-            productNameKh: logic.state.productDetail?.nameKh ?? "",
-            productName: logic.state.productDetail?.nameEn ?? "",
-            price: logic.state.productDetail?.price ?? 0.0,
-          );
-        },
+    return Screenshot(
+      controller: logic.screenshotController,
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: _floatActionButton(),
+        body: GetBuilder<ProductDetailLogic>(
+          builder: (logic) {
+            return CustomProductDetailView(
+              imageUrl:
+                  logic
+                      .state
+                      .productDetail
+                      ?.thumbnailImage
+                      ?.thumbnailFilePath ??
+                  "",
+              productNameKh: logic.state.productDetail?.nameKh ?? "",
+              productName: logic.state.productDetail?.nameEn ?? "",
+              price: logic.state.productDetail?.price ?? 0.0,
+            );
+          },
+        ),
       ),
     );
   }
@@ -99,19 +109,11 @@ class CustomProductDetailView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              XButton(
-                onPress: () async {
-                  await Get.find<BarcodeScannerService>().searchProduct(
-                    '011210006508',
-                  );
-                },
-                child: ProductInfoSection(
-                  productNameKh: productNameKh,
-                  productName: productName,
-                  price: price,
-
-                  stockStatus: "Available",
-                ),
+              ProductInfoSection(
+                productNameKh: productNameKh,
+                productName: productName,
+                price: price,
+                stockStatus: "Available",
               ),
             ],
           ),
@@ -229,6 +231,18 @@ class ProductInfoSection extends StatelessWidget {
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
             ),
           ),
+
+        XButton(
+          onPress: () => Get.find<ProductDetailLogic>().captureAndPrint(),
+          child: Container(
+            padding: EdgeInsets.all(8),
+            decoration: xBoxDecoration(
+              color: AppColor.primaryColor,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(Icons.print, color: Colors.white),
+          ),
+        ),
       ],
     );
   }
