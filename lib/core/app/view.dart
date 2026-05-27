@@ -58,10 +58,10 @@ class _AppPageState extends State<AppPage> {
             ),
             hintColor: AppColor.iconColorUnSelected,
           ),
-          // translations: AppTranslation(),
           initialRoute: AppRoute.splash,
           getPages: AppRoute.pages,
           defaultTransition: Transition.cupertino,
+          debugShowCheckedModeBanner: false,
           transitionDuration: const Duration(milliseconds: 500),
           builder: EasyLoading.init(
             builder: (context, child) {
@@ -78,7 +78,7 @@ class _AppPageState extends State<AppPage> {
                             overlayWidgetBuilder: (progress) => xLoading(),
                             child: GlobalBarcodeListener(child: child),
                           ),
-                          show: kDebugMode == true,
+                          show: kDebugMode == false,
                         ),
                       ),
                     ),

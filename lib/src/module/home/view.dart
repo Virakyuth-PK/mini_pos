@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mini_pos/core/app/service/barcode_scanner_service.dart';
+import 'package:mini_pos/core/global_widgets/x_refresh_indicator.dart';
 import 'package:mini_pos/core/utils/app_color.dart';
 import 'package:mini_pos/core/utils/app_style.dart';
 import 'package:mini_pos/core/utils/text_size.dart';
@@ -21,10 +22,10 @@ import '../../model/category_response/category_response.dart';
 import '../../model/proudct/proudct.dart';
 import 'logic.dart';
 import 'state.dart';
+import 'widgets/carousel_loading.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
-
+  HomePage({super.key});
   final HomeLogic logic = Get.put(HomeLogic());
   final HomeState state = Get.find<HomeLogic>().state;
 
@@ -32,7 +33,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.white,
-      floatingActionButton: _floatActionButton(),
       body: Stack(
         children: [
           Container(
@@ -50,15 +50,12 @@ class HomePage extends StatelessWidget {
                     Expanded(flex: 6, child: _buildPromotionSlider()),
                     Expanded(
                       flex: 4,
-                      child: Padding(
-                        padding: .symmetric(horizontal: 20.d),
-                        child: Column(
-                          spacing: 10.d,
-                          children: [
-                            _buildCategory(),
-                            Expanded(flex: 3, child: _productGridView()),
-                          ],
-                        ),
+                      child: Column(
+                        spacing: 10.d,
+                        children: [
+                          _buildCategory(),
+                          Expanded(flex: 3, child: _productGridView()),
+                        ],
                       ),
                     ),
                   ],
@@ -75,6 +72,7 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
+      floatingActionButton: _floatActionButton(),
     );
   }
 
@@ -107,19 +105,11 @@ class HomePage extends StatelessWidget {
           builderDelegate: XPagedChildBuilderDelegate.list(
             newPageProgressIndicatorBuilder: (context) {
               return Container(
-                margin: EdgeInsets.symmetric(vertical: 5.d),
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 5,
-                  separatorBuilder: (_, __) => xSpaceH(size: 5.d),
-                  itemBuilder: (_, __) => Container(
-                    padding: EdgeInsets.all(6.0.d),
-                    width: 170.d,
-                    height: 100.d,
-                    color: Colors.red,
-                  ).toShimmer,
-                ),
-              );
+                padding: EdgeInsets.all(6.0.d),
+                width: 170.d,
+                height: 100.d,
+                color: Colors.red,
+              ).toShimmer;
             },
             noItemsFoundIndicatorBuilder: (context) => EmptyData(),
             firstPageErrorIndicatorBuilder: (context) => EmptyData(),
@@ -146,21 +136,19 @@ class HomePage extends StatelessWidget {
       height: 140.0.d,
       width: Get.width,
       child: PagedListView<int, CategoryResponse>.separated(
-        padding: EdgeInsets.only(
-          right: 15..d,
-          top: 15..d,
-          bottom: 10..d,
-          left: 15.0.d,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 15.d, vertical: 15.d),
         separatorBuilder: (context, index) => xSpaceH(size: 15.d),
         pagingController: state.categoryPagingController.value,
         scrollDirection: Axis.horizontal,
         builderDelegate: XPagedChildBuilderDelegate.list(
           scrollDirection: Axis.horizontal,
-          firstPageProgressIndicatorBuilder: (context) => LoadingShimmer.list(
-            width: 150..d,
-            scrollDirection: Axis.horizontal,
-          ),
+          newPageProgressIndicatorBuilder: (context) => Container(
+            padding: EdgeInsets.all(6.0.d),
+            width: 170.d,
+            height: 100.d,
+            color: Colors.red,
+          ).toShimmer,
+
           itemBuilder: (context, item, index) {
             var isActive = state.currentIndex.value == index;
             return XButton(
@@ -237,7 +225,7 @@ class HomePage extends StatelessWidget {
 
   Widget _buildPromotionSlider() {
     if (state.imageUrlList.isEmpty) {
-      return SizedBox.shrink();
+      return const CarouselLoading();
     }
     return SizedBox(
       height: double.infinity,
