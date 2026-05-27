@@ -9,6 +9,8 @@ import 'package:mini_pos/src/module/product_detail/state.dart';
 import 'package:screenshot/screenshot.dart';
 import '../../../core/app/service/barcode_scanner_service.dart';
 import '../../../core/utils/app_ext.dart';
+import '../../../core/utils/app_log.dart';
+import '../widget/bottom_nav_widget.dart';
 import 'logic.dart';
 import 'widget/product_ai_chat_section.dart';
 
@@ -23,6 +25,12 @@ class ProductDetailPage extends StatelessWidget {
     return Screenshot(
       controller: logic.screenshotController,
       child: Scaffold(
+        bottomSheet: BottomNavWidget(
+          enableAIMode: true,
+          onSubmit: (String v) {
+            xPrettyLog(message: "Text Input $v");
+          },
+        ),
         extendBodyBehindAppBar: true,
         // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         // floatingActionButton: _floatActionButton(),
@@ -114,22 +122,18 @@ class CustomProductDetailView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               ProductInfoSection(
                 productNameKh: productNameKh,
                 productName: productName,
                 price: price,
                 stockStatus: "Available",
               ),
-
             ],
           ),
         ),
       ],
     );
   }
-
-
 }
 
 class ProductImageHeader extends StatelessWidget {
@@ -150,7 +154,7 @@ class ProductInfoSection extends StatelessWidget {
   final String? origin;
   final String? stockStatus;
 
-   ProductInfoSection({
+  ProductInfoSection({
     super.key,
 
     required this.productNameKh,
@@ -164,18 +168,19 @@ class ProductInfoSection extends StatelessWidget {
 
   String buildProductInfo(Map<String, dynamic>? json) {
     return json?.entries
-        .where((e) => e.value != null && e.value.toString().isNotEmpty)
-        .map((e) {
-      final key = e.key
-          .replaceAllMapped(
-        RegExp(r'([A-Z])'),
-            (match) => ' ${match.group(1)}',
-      )
-          .trim();
+            .where((e) => e.value != null && e.value.toString().isNotEmpty)
+            .map((e) {
+              final key = e.key
+                  .replaceAllMapped(
+                    RegExp(r'([A-Z])'),
+                    (match) => ' ${match.group(1)}',
+                  )
+                  .trim();
 
-      return '$key: ${e.value}';
-    })
-        .join('\n')??"";
+              return '$key: ${e.value}';
+            })
+            .join('\n') ??
+        "";
   }
 
   @override
@@ -206,8 +211,8 @@ class ProductInfoSection extends StatelessWidget {
             _description(),
 
             ProductAiChatSection(
-                productName: state.productDetail?.nameEn ?? '',
-                productInfo:buildProductInfo(state.productDetail?.toJson())
+              productName: state.productDetail?.nameEn ?? '',
+              productInfo: buildProductInfo(state.productDetail?.toJson()),
             ),
           ],
         ),
@@ -323,5 +328,4 @@ class ProductInfoSection extends StatelessWidget {
       ),
     );
   }
-
 }

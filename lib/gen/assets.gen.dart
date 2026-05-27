@@ -66,6 +66,9 @@ class $AssetsIconGen {
 class $AssetsSvgGen {
   const $AssetsSvgGen();
 
+  /// File path: assets/svg/back_icon.svg
+  String get backIcon => 'assets/svg/back_icon.svg';
+
   /// File path: assets/svg/cmgsvg.svg
   String get cmgsvg => 'assets/svg/cmgsvg.svg';
 
@@ -84,14 +87,31 @@ class $AssetsSvgGen {
   /// File path: assets/svg/scan.svg
   String get scan => 'assets/svg/scan.svg';
 
+  /// File path: assets/svg/search_icon.svg
+  String get searchIcon => 'assets/svg/search_icon.svg';
+
+  /// File path: assets/svg/send_icon.svg
+  String get sendIcon => 'assets/svg/send_icon.svg';
+
+  /// File path: assets/svg/si_ai_icon.svg
+  String get siAiIcon => 'assets/svg/si_ai_icon.svg';
+
+  /// File path: assets/svg/suggested_ai_icon.svg
+  String get suggestedAiIcon => 'assets/svg/suggested_ai_icon.svg';
+
   /// List of all assets
   List<String> get values => [
+    backIcon,
     cmgsvg,
     cmtrLogo,
     emptyData,
     lostWifi,
     noImage,
     scan,
+    searchIcon,
+    sendIcon,
+    siAiIcon,
+    suggestedAiIcon,
   ];
 }
 

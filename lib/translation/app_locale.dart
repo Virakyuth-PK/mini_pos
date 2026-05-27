@@ -21,4 +21,8 @@ class AppLocale {
   static var search = "Search";
   static var searchProduct = "Search Product";
   static var back = "Back";
+
+  static var retail = "CHIP MONG RETAIL";
+
+  static var askAI = "Ask anything about this product";
 }

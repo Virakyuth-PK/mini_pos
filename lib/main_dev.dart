@@ -1,4 +1,3 @@
-import 'package:firebase_ai/firebase_ai.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'flutter_fire/firebase_options_dev.dart';
@@ -10,9 +9,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FConfig.appFlavor = Flavor.dev;
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await runner.main();
 }
