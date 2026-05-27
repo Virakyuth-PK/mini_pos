@@ -68,6 +68,7 @@ class BottomNavWidget extends StatelessWidget {
         maxLines: 1,
         onFieldSubmitted: (v) {
           onSubmit.call(v);
+          controller.clear();
         },
         hintText: enableAIMode == true
             ? AppLocale.askAI.tr
@@ -93,6 +94,7 @@ class BottomNavWidget extends StatelessWidget {
         onSuffixIconPress: () {
           final v = controller.text;
           onSubmit.call(v);
+          controller.clear();
         },
         prefixIcon: Padding(
           padding: const EdgeInsets.all(8.0),

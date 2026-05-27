@@ -87,6 +87,11 @@ class BarcodeScannerService extends GetxService {
   /// SEARCH PRODUCT
   /// =========================
   Future<void> searchProduct(String barcode) async {
+    // return if keyboard is open
+    if (MediaQuery.of(Get.context!).viewInsets.bottom > 0) {
+      return;
+    }
+
     if (isSearching.value) return;
     final productRepo = Get.find<ProductRepo>();
 
@@ -190,18 +195,45 @@ class _GlobalBarcodeListenerState extends State<GlobalBarcodeListener> {
       focusNode: _focusNode,
       autofocus: true,
       onKeyEvent: (event) {
+        if (isUserTyping()) return;
+
         if (event is KeyDownEvent) {
           scannerService.handleKey(event);
         }
 
-        /// keep focus forever
-        if (!_focusNode.hasFocus) {
-          _focusNode.requestFocus();
-        }
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          if (!isUserTyping() && !_focusNode.hasFocus) {
+            _focusNode.requestFocus();
+          }
+        });
       },
       child: widget.child,
     );
   }
+  bool isUserTyping() {
+    final focus = FocusManager.instance.primaryFocus;
+    final context = focus?.context;
+
+    if (context == null) return false;
+
+    final isTextInput = context.widget is EditableText;
+    final keyboardOpen = View.of(context).viewInsets.bottom > 0;
+
+    return isTextInput && keyboardOpen;
+  }
+
+  void _keepFocus() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final primaryFocus = FocusManager.instance.primaryFocus;
+      final isTyping = primaryFocus?.context?.widget is EditableText;
+
+      if (!isTyping && mounted && !_focusNode.hasFocus) {
+        _focusNode.requestFocus();
+      }
+    });
+  }
+
 
   @override
   void dispose() {

@@ -33,14 +33,8 @@ class SearchPage extends StatelessWidget {
         return Scaffold(
           key: scaffoldKey,
           appBar: _appBar(),
-
-          // floatingActionButtonLocation:
-          //     FloatingActionButtonLocation.centerDocked,
-          // floatingActionButton: _floatActionButton(),
           bottomSheet: BottomNavWidget(
-            onSubmit: (String v) {
-              xPrettyLog(message: "Text Input $v");
-            },
+            onSubmit: (String value) async => await logic.onSearch(value),
           ),
           body: SizedBox(
             height: Get.height,
@@ -129,47 +123,10 @@ class SearchPage extends StatelessWidget {
                 color: AppColor.white,
               ),
             ),
-            // Expanded(
-            //   child: XTextField(
-            //     contentPadding: EdgeInsets.zero,
-            //     maxLines: 1,
-            //     borderRadius: BorderRadius.circular(20.d),
-            //     onChanged: (value) {
-            //       logic.onSearch(value);
-            //     },
-            //
-            //     isDense: true,
-            //     hintText: AppLocale.searchProduct.tr,
-            //
-            //     prefixIcon: Icon(
-            //       Icons.search,
-            //       size: 20.0.d,
-            //       color: AppColor.primaryColor,
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),
     ),
   );
 
-  Widget _floatActionButton() => Container(
-    margin: EdgeInsetsGeometry.symmetric(horizontal: 15.d, vertical: 15.d),
-    width: Get.width,
-    height: 50.d,
-    child: FloatingActionButton.extended(
-      onPressed: () => Get.back(),
-      backgroundColor: AppColor.primaryColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.d)),
-      label: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.arrow_back_ios_new, color: AppColor.white),
-          SizedBox(width: 8.d),
-          Text("Back", style: TextStyle(color: AppColor.white)),
-        ],
-      ),
-    ),
-  );
 }

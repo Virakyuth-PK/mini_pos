@@ -46,6 +46,7 @@ class ProductRepo implements IProductRepo {
       },
       endPoint: ApiEndpoint.product(ProductEndpoint.Get_All),
     );
+    result?.data?.removeWhere((element) => (element.thumbnailImage?.filePath??"") == "",);
 
     return result;
   }
