@@ -75,6 +75,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/cmtr_logo.svg
   String get cmtrLogo => 'assets/svg/cmtr_logo.svg';
 
+  /// File path: assets/svg/cmtr_logo_svg.svg
+  String get cmtrLogoSvg => 'assets/svg/cmtr_logo_svg.svg';
+
   /// File path: assets/svg/empty_data.svg
   String get emptyData => 'assets/svg/empty_data.svg';
 
@@ -104,6 +107,7 @@ class $AssetsSvgGen {
     backIcon,
     cmgsvg,
     cmtrLogo,
+    cmtrLogoSvg,
     emptyData,
     lostWifi,
     noImage,

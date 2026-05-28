@@ -15,4 +15,5 @@ class HomeState {
   var imageUrlList = <String>[];
   var currentIndex = 0.obs;
   var currentIndexSlide = 0.obs;
+  var appVersion = "".obs;
 }

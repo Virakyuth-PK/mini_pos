@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:mini_pos/src/data/repo/product_repo.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
@@ -14,7 +15,6 @@ class HomeLogic extends GetxController {
   final ProductRepo _productRepo = Get.find<ProductRepo>();
   final PromotionRepo _promotionRepo = Get.find<PromotionRepo>();
 
-
   @override
   Future<void> onInit() async {
     // TODO: implement onInit
@@ -25,6 +25,7 @@ class HomeLogic extends GetxController {
     state.productPagingController.value.addPageRequestListener((pageNo) {
       getListProduct(pageNo: pageNo);
     });
+    await getAppVersion();
     await getPromotionList();
   }
 
@@ -36,7 +37,7 @@ class HomeLogic extends GetxController {
             ?.map((e) => e.bannerFile?.thumbnailFilePath ?? '')
             .whereType<String>()
             .toList() ??
-            [];
+        [];
 
     update();
   }
@@ -79,7 +80,6 @@ class HomeLogic extends GetxController {
     );
   }
 
-
   Future<void> getCategoryList({
     required int pageNo,
     bool isRefresh = false,
@@ -100,5 +100,13 @@ class HomeLogic extends GetxController {
     state.currentIndex.value = index;
     state.productPagingController.value.refresh();
     update();
+  }
+
+  Future<void> getAppVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+    state.appVersion.value = "v$version";
   }
 }

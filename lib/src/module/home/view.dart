@@ -26,6 +26,7 @@ import 'widgets/carousel_loading.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
+
   final HomeLogic logic = Get.put(HomeLogic());
   final HomeState state = Get.find<HomeLogic>().state;
 
@@ -300,46 +301,90 @@ class HomePage extends StatelessWidget {
 
   Widget _bottomNavigationBar() {
     return Container(
-      height: 40.d,
       decoration: xBoxDecoration(
         color: AppColor.white,
         borderRadius: BorderRadius.zero,
       ),
-      child: Padding(
-        padding: .symmetric(vertical: 5.d),
-        child: Row(
-          mainAxisAlignment: .center,
-          spacing: 10.d,
-          children: [
-            SvgPicture.asset(Assets.svg.cmtrLogo, fit: .fitHeight),
-            VerticalDivider(),
-            SvgPicture.asset(Assets.svg.cmgsvg, fit: .fitHeight),
-            Column(
-              crossAxisAlignment: .start,
-              children: [
-                Text("Develop By", style: XTextStyle.bold(fontSize: 8.d)),
-                Row(
-                  spacing: 5.d,
-                  crossAxisAlignment: .start,
-                  children: [
-                    Text(
-                      "CHIP MONG",
-                      style: XTextStyle.bold(fontSize: 8.d, fontWeight: .w900),
+      padding: EdgeInsets.symmetric(vertical: 5.d),
+      child: Row(
+        mainAxisAlignment: .center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        spacing: 10.d,
+        children: [
+          Row(
+            spacing: 5.d,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SvgPicture.asset(Assets.svg.cmtrLogoSvg, width: 30.d),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    "Chip Mong".toUpperCase(),
+                    style: XTextStyle.regular(
+                      fontSize: 8.d,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Text(
-                      "GROUP",
-                      style: XTextStyle.bold(
-                        fontSize: 8.d,
-                        fontWeight: .w900,
-                        color: CompanyColor.CHIPMONG_GROUP,
+                  ),
+                  Text(
+                    "Retail".toUpperCase(),
+                    style: XTextStyle.regular(
+                      color: AppColor.primaryColor,
+                      fontSize: 8.d,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Container(width: 1, height: 30.d, color: AppColor.hintColor),
+          Row(
+            spacing: 5.d,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(Assets.svg.cmgsvg, width: 30.d),
+              Column(
+                crossAxisAlignment: .start,
+                children: [
+                  Text(
+                    "Develop By".toUpperCase(),
+                    style: XTextStyle.bold(fontSize: 8.d),
+                  ),
+                  Row(
+                    spacing: 5.d,
+                    crossAxisAlignment: .start,
+                    children: [
+                      Text(
+                        "CHIP MONG",
+                        style: XTextStyle.bold(
+                          fontSize: 8.d,
+                          fontWeight: .w900,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
+                      Text(
+                        "GROUP",
+                        style: XTextStyle.bold(
+                          fontSize: 8.d,
+                          fontWeight: .w900,
+                          color: CompanyColor.CHIPMONG_GROUP,
+                        ),
+                      ),
+                      Obx(() {
+                        return Text(
+                          "${state.appVersion.value}",
+                          style: XTextStyle.bold(fontSize: 8.d),
+                        );
+                      }),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
