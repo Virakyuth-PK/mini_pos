@@ -17,7 +17,6 @@ class HomeLogic extends GetxController {
 
   @override
   Future<void> onInit() async {
-    // TODO: implement onInit
     super.onInit();
     state.categoryPagingController.value.addPageRequestListener((pageNo) {
       getCategoryList(pageNo: pageNo);
@@ -78,6 +77,7 @@ class HomeLogic extends GetxController {
       isRefresh: isRefresh,
       pageNo: pageNo,
     );
+    update();
   }
 
   Future<void> getCategoryList({
@@ -94,6 +94,7 @@ class HomeLogic extends GetxController {
       isRefresh: isRefresh,
       pageNo: pageNo,
     );
+    update();
   }
 
   void onChangeCategory(int index) {

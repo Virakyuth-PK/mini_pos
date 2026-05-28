@@ -25,31 +25,11 @@ class xLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: Get.height,
-      width: Get.width,
-      child: Padding(
-        padding: xPadding(multiply: .05),
-        child: ClipRRect(
-          borderRadius: xBorderRadius,
-          child: Center(
-            child: Column(
-              crossAxisAlignment: .center,
-              mainAxisAlignment: .center,
-              children: [
-                Image.asset(
-                  // Assets.icon.logoSolidDevWhite.path,
-                  Assets.gif.cmrtLoading.path,
-                  width: Get.width * 0.4,
-                ),
-                LoadingAnimationWidget.stretchedDots(
-                  size: 50.d,
-                  color: primaryColor,
-                ),
-              ],
-            ),
-          ),
-        ),
+    return Center(
+      child:  Image.asset(
+        // Assets.icon.logoSolidDevWhite.path,
+        Assets.gif.cmrtLoading.path,
+        width: Get.width * 0.25,
       ),
     );
   }

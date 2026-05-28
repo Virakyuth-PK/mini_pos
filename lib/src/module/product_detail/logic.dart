@@ -3,16 +3,20 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mini_pos/core/global_widgets/x_button.dart';
 import 'package:mini_pos/core/utils/app_color.dart';
 import 'package:mini_pos/core/utils/app_style.dart';
 import 'package:mini_pos/core/utils/text_size.dart';
+import 'package:pdfx/pdfx.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:sunmi_flutter_helper/sunmi_flutter_helper.dart';
 import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
 import '../../../core/services/gemini_service.dart';
 import '../../../core/utils/app_ext.dart';
+import '../../../gen/assets.gen.dart';
 import 'state.dart';
 
 class ProductDetailLogic extends GetxController {
@@ -82,7 +86,7 @@ class ProductDetailLogic extends GetxController {
 
       if (image == null) return;
 
-      final resized = await resizeForPrinter(image,570);
+      final resized = await resizeForPrinter(image, 570);
 
       final shouldPrint = await Get.dialog<bool>(
         Dialog(
@@ -137,12 +141,99 @@ class ProductDetailLogic extends GetxController {
       // await SunmiPrinter.bindingPrinter();
       // await SunmiPrinter.initPrinter();
 
-      await SunmiPrinter.printImage(resized,align: .CENTER);
+      await SunmiPrinter.printImage(resized, align: .CENTER);
 
       await SunmiPrinter.lineWrap(3);
       await SunmiPrinter.cutPaper();
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  Future<void> captureAndPrintTest() async {
+    await SunmiPrinter.printText(
+      'Simple raw text left',
+      style: SunmiTextStyle(align: SunmiPrintAlign.LEFT),
+    );
+    await SunmiPrinter.printText(
+      'Bold text centered right',
+      style: SunmiTextStyle(bold: true, align: SunmiPrintAlign.RIGHT),
+    );
+
+    await SunmiPrinter.lineWrap(2); // Jump 2 lines
+    await SunmiPrinter.printText(
+      'Very Large font! CENTER',
+      style: SunmiTextStyle(align: SunmiPrintAlign.CENTER, fontSize: 80),
+    );
+
+    await SunmiPrinter.printText(
+      'Custom font size!!!CENTER',
+      style: SunmiTextStyle(align: SunmiPrintAlign.CENTER, fontSize: 32),
+    );
+
+    await SunmiPrinter.printQRCode(
+      'https://virakyuth-pk.github.io',
+      style: SunmiQrcodeStyle(
+        qrcodeSize: 3,
+        align: SunmiPrintAlign.CENTER,
+        errorLevel: SunmiQrcodeLevel.LEVEL_H,
+      ),
+    ); // PRINT A QRCODE
+
+    await SunmiPrinter.printBarCode(
+      '067333652'.toLocalPhoneNumber(),
+      style: SunmiBarcodeStyle(textPos: SunmiBarcodeTextPos.TEXT_UNDER),
+    ); // PRINT A BARCODE
+
+    await SunmiPrinter.lineWrap(3);
+    await SunmiPrinter.cutPaper();
+  }
+
+  Future<void> captureAndPrintTestImage() async {
+    final data = await rootBundle.load(Assets.icon.logoSolidProdWhite.path);
+    final byte = data.buffer.asUint8List();
+    final resized = await resizeForPrinter(byte, 570);
+
+    await SunmiPrinter.printImage(resized);
+
+    await SunmiPrinter.lineWrap(3);
+    await SunmiPrinter.cutPaper();
+  }
+
+  Future<void> captureAndPrintTestPDF() async {
+    // load pdf
+    final data = await rootBundle.load(Assets.sample);
+
+    final pdfBytes = data.buffer.asUint8List();
+
+    // open pdf
+    final document = await PdfDocument.openData(pdfBytes);
+
+    // print every page
+    for (int i = 1; i <= document.pagesCount; i++) {
+      final page = await document.getPage(i);
+
+      final pageImage = await page.render(
+        width: page.width * 2,
+        height: page.height * 2,
+        format: PdfPageImageFormat.png,
+      );
+
+      if (pageImage == null) continue;
+
+      final resized = await resizeForPrinter(
+        pageImage.bytes,
+        576,
+      );
+
+      await SunmiPrinter.printImage(resized);
+
+      await page.close();
+    }
+
+    await document.close();
+
+    await SunmiPrinter.lineWrap(3);
+    await SunmiPrinter.cutPaper();
   }
 }

@@ -18,52 +18,38 @@ class ProductDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Screenshot(
-      controller: logic.screenshotController,
-      child: Scaffold(
-        bottomSheet: BottomNavWidget(
-          enableAIMode: true,
-          onSubmit: (String value) async =>
-              await aiChatKey.currentState?.sendMessage(value),
-        ),
-        body: Column(
-          spacing: 10,
-          children: [
-            Expanded(
-              flex: 5,
-              child: Column(
-                spacing: 10,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: XNetworkImage(
-                      src: state.productDetail?.thumbnailImage?.filePath ?? "",
-                      fit: BoxFit.fitWidth,
-                      errorWidget: SizedBox.shrink(),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: ProductInfoSection(
-                      productNameKh: state.productDetail?.nameEn ?? "",
-                      productName: state.productDetail?.nameKh ?? "",
-                      price: state.productDetail?.price ?? 0,
-                      stockStatus: "Available",
-                    ),
-                  ),
-                ],
+    return Scaffold(
+      bottomSheet: BottomNavWidget(
+        enableAIMode: true,
+        onSubmit: (String value) async =>
+            await aiChatKey.currentState?.sendMessage(value),
+      ),
+      body: GetBuilder<ProductDetailLogic>(
+        builder: (logic) {
+          return Column(
+            spacing: 10,
+            children: [
+              Expanded(
+                flex: 6,
+                child: ProductInfoSection(
+                  productImage: state.productDetail?.thumbnailImage?.filePath ?? "",
+                  productNameKh: state.productDetail?.nameEn ?? "",
+                  productName: state.productDetail?.nameKh ?? "",
+                  price: state.productDetail?.price ?? 0,
+                  stockStatus: "Available",
+                ),
               ),
-            ),
-            Expanded(
-              flex: 7,
-              child: ProductAiChatSection(
-                key: aiChatKey,
-                productName: state.productDetail?.nameKh ?? "",
-                productInfo: state.productInfo,
+              Expanded(
+                flex: 5,
+                child: ProductAiChatSection(
+                  key: aiChatKey,
+                  productName: state.productDetail?.nameKh ?? "",
+                  productInfo: state.productInfo,
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          );
+        },
       ),
     );
   }

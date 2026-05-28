@@ -135,7 +135,11 @@ class Assets {
 
   static const $AssetsGifGen gif = $AssetsGifGen();
   static const $AssetsIconGen icon = $AssetsIconGen();
+  static const String sample = 'assets/sample.pdf';
   static const $AssetsSvgGen svg = $AssetsSvgGen();
+
+  /// List of all assets
+  static List<String> get values => [sample];
 }
 
 class AssetGenImage {

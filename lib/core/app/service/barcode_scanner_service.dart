@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:mini_pos/core/utils/app_ext.dart';
 import 'package:mini_pos/src/data/repo/product_repo.dart';
@@ -66,64 +67,78 @@ class BarcodeScannerService extends GetxService {
   /// DEBUG TOAST
   /// =========================
   void showLog(String message, {Color background = Colors.black87}) {
-    if (Get.isSnackbarOpen) {
-      Get.closeCurrentSnackbar();
-    }
-
-    Get.rawSnackbar(
-      messageText: Text(
-        message,
-        style: const TextStyle(color: Colors.white, fontSize: 14),
-      ),
-      snackPosition: SnackPosition.TOP,
-      backgroundColor: background,
-      margin: const EdgeInsets.all(10),
-      borderRadius: 12,
-      duration: const Duration(seconds: 1),
-    );
+    // if (Get.isSnackbarOpen) {
+    //   Get.closeCurrentSnackbar();
+    // }
+    //
+    // Get.rawSnackbar(
+    //   messageText: Text(
+    //     message,
+    //     style: const TextStyle(color: Colors.white, fontSize: 14),
+    //   ),
+    //   snackPosition: SnackPosition.TOP,
+    //   backgroundColor: background,
+    //   margin: const EdgeInsets.all(10),
+    //   borderRadius: 12,
+    //   duration: const Duration(seconds: 1),
+    // );
   }
 
   /// =========================
   /// SEARCH PRODUCT
   /// =========================
   Future<void> searchProduct(String barcode) async {
-    // return if keyboard is open
     if (MediaQuery.of(Get.context!).viewInsets.bottom > 0) {
       return;
     }
 
     if (isSearching.value) return;
+
     final productRepo = Get.find<ProductRepo>();
 
     try {
       isSearching.value = true;
+
+      EasyLoading.show(status: '');
+
       showLog('🔍 Scanning : $barcode', background: Colors.blue);
 
-      /// simulate api loading
       await Future.delayed(const Duration(seconds: 1));
 
-      /// simulate not found
       if (barcode == '0000') {
         showLog('❌ Product not found', background: Colors.red);
+        EasyLoading.showError('Product not found');
         return;
       }
 
-      var result = await productRepo.getProductByBarcode(barcode);
+      final result = await productRepo.getProductByBarcode(barcode);
+
       if (result == null) {
         showLog('❌ Product not found', background: Colors.red);
+        EasyLoading.showError('Product not found');
         return;
-      } else {}
+      }
 
-      /// simulate found product
       final product = ProductModel(
         barcode: barcode,
         name: result.nameKh ?? result.nameEn ?? 'Unknown',
         price: (result.price ?? 0.0).toString(),
-        imageUrl: ' ${result.thumbnailImage?.thumbnailFilePath}',
+        imageUrl: result.thumbnailImage?.thumbnailFilePath ?? '',
       );
 
       showLog('✅ ${product.name} found', background: Colors.green);
-      Get.delete<ProductDetailLogic>();
+      final isOnProductDetail = Get.currentRoute == AppRoute.productDetail;
+
+      if (isOnProductDetail) {EasyLoading.dismiss();
+        Get.delete<ProductDetailLogic>(force: true);
+        await Get.offNamed(
+          AppRoute.productDetail,
+          arguments: result,
+          preventDuplicates: false,
+        );
+        return;
+      }
+      EasyLoading.dismiss();
       Get.toNamed(
         AppRoute.productDetail,
         arguments: result,
@@ -131,8 +146,10 @@ class BarcodeScannerService extends GetxService {
       );
     } catch (e) {
       showLog('🔥 Error : $e', background: Colors.orange);
+      EasyLoading.showError('Error: $e');
     } finally {
       isSearching.value = false;
+      EasyLoading.dismiss();
     }
   }
 }

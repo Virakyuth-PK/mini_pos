@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:mini_pos/core/app/service/barcode_scanner_service.dart';
 import 'package:mini_pos/core/app/state.dart';
+import 'package:sunmi_flutter_helper/sunmi_flutter_helper.dart';
 
 import '../../flavors.dart';
 import '../../gen/fonts.gen.dart';
@@ -110,10 +111,30 @@ class _AppPageState extends State<AppPage> {
 
     return con;
   }
+  bool _isProcessingScan = false;
 
   @override
   void initState() {
     super.initState();
+
+    SunmiFlutterHelper.scanStream.listen((code) async {
+      if (_isProcessingScan) return;
+
+      _isProcessingScan = true;
+
+      try {
+        final barcode = code.removeAllWhitespace.trim();
+
+        BarcodeScannerService()
+            .showLog("[scanStream::$barcode]");
+
+        await BarcodeScannerService()
+            .searchProduct(barcode);
+      } finally {
+        _isProcessingScan = false;
+      }
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _easyLoadingConfig();
     });

@@ -63,6 +63,8 @@ dependencies:
   carousel_slider: ^5.1.2
   firebase_ai: ^3.12.1
   auto_size_text: ^3.0.0
+  sunmi_flutter_helper: ^0.0.9
+  pdfx: ^2.9.2
 
 dev_dependencies:
   flutter_test:
@@ -88,6 +90,7 @@ flutter:
     - assets/icon/home/
     - assets/svg/
     - assets/gif/
+    - assets/
 
   fonts:
     - family: custom

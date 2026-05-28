@@ -1,9 +1,10 @@
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mini_pos/core/global_widgets/x_network_image.dart';
 import 'package:mini_pos/core/utils/text_size.dart';
 
+import '../../../../core/app/service/barcode_scanner_service.dart';
 import '../../../../core/global_widgets/x_button.dart';
 import '../../../../core/utils/app_color.dart';
 import '../../../../core/utils/app_style.dart';
@@ -16,6 +17,7 @@ class ProductInfoSection extends StatelessWidget {
   final double price;
   final String? origin;
   final String? stockStatus;
+  final String? productImage;
 
   ProductInfoSection({
     super.key,
@@ -25,25 +27,57 @@ class ProductInfoSection extends StatelessWidget {
     required this.price,
     this.origin,
     this.stockStatus,
+    required this.productImage,
   });
-
-
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: .symmetric(horizontal: 20),
-      child: Column(
-        spacing: 5,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _originBadge(),
-          _title(),
-          _priceRow(),
-          Divider(thickness: .3,color: AppColor.primaryColor.withValues(alpha: .5),),
-          _description(),
-        ],
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          child: Column(
+            spacing: 10,
+            children: [
+              SizedBox(
+                height: constraints.maxHeight * .5,
+                child: XNetworkImage(
+                  src: productImage ?? "",
+                  fit: BoxFit.contain,
+                  width: Get.width,
+                ),
+              ),
+
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight * .5,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    spacing: 5,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _originBadge(),
+                      _title(),
+                      _priceRow(),
+
+                      Divider(
+                        thickness: .3,
+                        color: AppColor.primaryColor.withValues(alpha: .5),
+                      ),
+
+                      _description(),
+                      _description(),
+                      _description(),
+                      _description(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -123,23 +157,60 @@ class ProductInfoSection extends StatelessWidget {
             color: AppColor.primaryColor,
           ),
         ),
-        XButton(
-          onPress: () => Get.find<ProductDetailLogic>().captureAndPrint(),
-          child: Container(
-            padding: EdgeInsets.all(8),
-            decoration: xBoxDecoration(
-              color: AppColor.primaryColor,
-              shape: BoxShape.circle,
+        Row(spacing: 5,
+          children: [
+            XButton(toolTip: "PrintTest",
+              onPress: () => Get.find<ProductDetailLogic>().captureAndPrintTest(),
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: xBoxDecoration(
+                  color: AppColor.primaryColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.print, color: Colors.white),
+              ),
             ),
-            child: Icon(Icons.print, color: Colors.white),
-          ),
+            XButton(toolTip: "PrintTestImage",
+              onPress: () => Get.find<ProductDetailLogic>().captureAndPrintTestImage(),
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: xBoxDecoration(
+                  color: AppColor.primaryColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.image, color: Colors.white),
+              ),
+            ),
+            XButton(toolTip: "010700519528",
+              onPress: () async => await Get.find<BarcodeScannerService>().searchProduct('010700519528'),
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: xBoxDecoration(
+                  color: AppColor.primaryColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.animation_outlined, color: Colors.white),
+              ),
+            ),
+            XButton(toolTip: "PrintTestPDF",
+              onPress: () async => Get.find<ProductDetailLogic>().captureAndPrintTestPDF(),
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: xBoxDecoration(
+                  color: AppColor.primaryColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.picture_as_pdf, color: Colors.white),
+              ),
+            ),
+          ],
         ),
       ],
     );
   }
 
   Widget _description() {
-    return  AutoSizeText(
+    return AutoSizeText(
       "Premium polyethylene cling wrap optimized for food safety packaging applications. Keeps meals fresh longer.",
       style: XTextStyle.regular(fontSize: 5),
     );
