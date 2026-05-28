@@ -117,7 +117,9 @@ class HomePage extends StatelessWidget {
             itemBuilder: (context, item, index) {
               return XButton(
                 onPress: () {
-                  Get.toNamed(AppRoute.productDetail, arguments: item);
+                  Get.toNamed(
+
+                      AppRoute.productDetail, arguments: item);
                 },
                 child: ProductItem(
                   product: item,

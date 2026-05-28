@@ -129,13 +129,10 @@ class BarcodeScannerService extends GetxService {
       showLog('✅ ${product.name} found', background: Colors.green);
       final isOnProductDetail = Get.currentRoute == AppRoute.productDetail;
 
-      if (isOnProductDetail) {EasyLoading.dismiss();
-        Get.delete<ProductDetailLogic>(force: true);
-        await Get.offNamed(
-          AppRoute.productDetail,
-          arguments: result,
-          preventDuplicates: false,
-        );
+      if (isOnProductDetail) {
+        EasyLoading.dismiss();
+        Get.find<ProductDetailLogic>().state.productDetail = result;
+        Get.find<ProductDetailLogic>().update();
         return;
       }
       EasyLoading.dismiss();
@@ -228,6 +225,7 @@ class _GlobalBarcodeListenerState extends State<GlobalBarcodeListener> {
       child: widget.child,
     );
   }
+
   bool isUserTyping() {
     final focus = FocusManager.instance.primaryFocus;
     final context = focus?.context;
@@ -250,7 +248,6 @@ class _GlobalBarcodeListenerState extends State<GlobalBarcodeListener> {
       }
     });
   }
-
 
   @override
   void dispose() {

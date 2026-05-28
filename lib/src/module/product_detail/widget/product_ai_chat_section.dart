@@ -16,10 +16,12 @@ class ProductAiChatSection extends StatefulWidget {
     super.key,
     required this.productName,
     required this.productInfo,
+    required this.onReady,
   });
 
   final String productName;
   final String productInfo;
+  final void Function(void Function(String value) send)? onReady;
 
   @override
   State<ProductAiChatSection> createState() => ProductAiChatSectionState();
@@ -49,6 +51,7 @@ class ProductAiChatSectionState extends State<ProductAiChatSection> {
   @override
   void initState() {
     super.initState();
+    widget.onReady?.call(sendMessage);
 
     aiService = ProductAiService(
       productName: widget.productName,

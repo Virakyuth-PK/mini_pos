@@ -14,7 +14,8 @@ class ProductDetailPage extends StatelessWidget {
 
   final ProductDetailLogic logic = Get.put(ProductDetailLogic());
   final ProductDetailState state = Get.find<ProductDetailLogic>().state;
-  final aiChatKey = GlobalKey<ProductAiChatSectionState>();
+  // final aiChatKey = GlobalKey<ProductAiChatSectionState>();
+  void Function(String value)? sendAiMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class ProductDetailPage extends StatelessWidget {
       bottomSheet: BottomNavWidget(
         enableAIMode: true,
         onSubmit: (String value) async =>
-            await aiChatKey.currentState?.sendMessage(value),
+             sendAiMessage?.call(value),
       ),
       body: GetBuilder<ProductDetailLogic>(
         builder: (logic) {
@@ -32,7 +33,8 @@ class ProductDetailPage extends StatelessWidget {
               Expanded(
                 flex: 6,
                 child: ProductInfoSection(
-                  productImage: state.productDetail?.thumbnailImage?.filePath ?? "",
+                  productImage:
+                      state.productDetail?.thumbnailImage?.filePath ?? "",
                   productNameKh: state.productDetail?.nameEn ?? "",
                   productName: state.productDetail?.nameKh ?? "",
                   price: state.productDetail?.price ?? 0,
@@ -42,9 +44,12 @@ class ProductDetailPage extends StatelessWidget {
               Expanded(
                 flex: 5,
                 child: ProductAiChatSection(
-                  key: aiChatKey,
+                  key: ValueKey(state.productDetail?.barcode),
                   productName: state.productDetail?.nameKh ?? "",
                   productInfo: state.productInfo,
+                  onReady: (send) {
+                    sendAiMessage = send;
+                  },
                 ),
               ),
             ],
